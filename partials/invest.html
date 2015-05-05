@@ -1,0 +1,56 @@
+<div layout="column">
+    <!--<section ng-repeat="project in newProjectList">-->
+        <!--<header class="">-->
+            <!--<h2 class="">{{project.item_name}}<span class="notice">*</span></h2>-->
+        <!--</header>-->
+        <!--<h2>{{project.process_percent}}</h2>-->
+    <!--</section>-->
+    <!--<p>{{newProjectList}}</p>-->
+    <!--<table>-->
+        <!--<tr><th>row number</th></tr>-->
+        <!--<tr ng-repeat="i in [0, 1, 2, 3, 4, 5, 6, 7]"><td>{{i}}</td></tr>-->
+    <!--</table>-->
+    <!--<div ng-repeat="item in items" ng-show="!$first">-->
+</div>
+
+<div style="width: 100%;height: 100%;">
+    <md-content class="md-padding">
+        <md-tabs md-dynamic-height md-border-bottom>
+            <md-tab label="全部">
+                <!--<md-content class="md-padding">-->
+                    <h1 class="md-display-2">Tab One</h1>
+                    <section ng-repeat="project in newProjectList">
+                        <header class="">
+                            <h2 class="">{{project.item_name}}<span class="notice">*</span></h2>
+                        </header>
+                        <h2>{{project.process_percent}}</h2>
+                    </section>
+                <!--</md-content>-->
+            </md-tab>
+            <md-tab label="银票理财">
+                <md-content class="md-padding">
+                    <h1 class="md-display-2">Tab Two</h1>
+
+                </md-content>
+            </md-tab>
+            <md-tab label="银商理财">
+                <md-content class="md-padding">
+                    <h1 class="md-display-2">Tab Three</h1>
+
+                </md-content>
+            </md-tab>
+            <md-tab label="转让项目">
+                <md-content class="md-padding">
+                    <h1 class="md-display-2">Tab Three</h1>
+
+                </md-content>
+            </md-tab>
+            <md-tab label="第三方平台">
+                <md-content class="md-padding">
+                    <h1 class="md-display-2">Tab Three</h1>
+
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </md-content>
+</div>

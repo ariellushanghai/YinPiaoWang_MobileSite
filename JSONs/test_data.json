@@ -1,0 +1,66 @@
+[
+  {
+    "item_name": "\"银票红二号\"1期",
+    "process_percent": "0.5",
+    "annual_yield": "0.092",
+    "duration": "60",
+    "amount": "1100000",
+    "transfer": "true"
+  },
+  {
+    "item_name": "\"银票红二号\"2期",
+    "process_percent": "0.5",
+    "annual_yield": "0.092",
+    "duration": "60",
+    "amount": "1100000",
+    "transfer": "true"
+  },
+  {
+    "item_name": "\"银票红二号\"3期",
+    "process_percent": "0.5",
+    "annual_yield": "0.092",
+    "duration": "60",
+    "amount": "1100000",
+    "transfer": "true"
+  },
+  {
+    "item_name": "\"银票红二号\"4期",
+    "process_percent": "0.5",
+    "annual_yield": "0.092",
+    "duration": "60",
+    "amount": "1100000",
+    "transfer": "true"
+  },
+  {
+    "item_name": "\"银票红二号\"5期",
+    "process_percent": "0.5",
+    "annual_yield": "0.092",
+    "duration": "60",
+    "amount": "1100000",
+    "transfer": "true"
+  },
+  {
+    "item_name": "\"银票红二号\"6期",
+    "process_percent": "0.5",
+    "annual_yield": "0.092",
+    "duration": "60",
+    "amount": "1100000",
+    "transfer": "true"
+  },
+  {
+    "item_name": "\"银票红二号\"7期",
+    "process_percent": "0.5",
+    "annual_yield": "0.092",
+    "duration": "60",
+    "amount": "1100000",
+    "transfer": "true"
+  },
+  {
+    "item_name": "\"银票红二号\"8期",
+    "process_percent": "0.5",
+    "annual_yield": "0.092",
+    "duration": "60",
+    "amount": "1100000",
+    "transfer": "true"
+  }
+]

@@ -1,0 +1,161 @@
+@charset "utf-8";
+
+/*reset*/
+html, body, ul, li, ol, dl, dd, dt, p, h1, h2, h3, h4, h5, h6, form, fieldset, legend, img, select, input, textarea { margin: 0px; padding: 0px;}
+/*fieldset, img { border:none; }*/
+ul, ol { list-style:none; }
+/*select, input { vertical-align:middle; }*/
+/*input[type="text"], input[type="password"], textarea { outline-style:none; -webkit-appearance:none; }*/
+/*textarea { resize:none; }*/
+/*input,textarea{background: none; border: none;}*/
+/*table { border-collapse:collapse; }*/
+a {text-decoration:none; color: rgb(99, 99, 99);}
+
+body {
+    font-family: "Hiragino Sans GB", "Microsoft Yahei", "Droid Sans", sans-serif;
+    font-size: 12px;
+    background-color: white;
+    color: rgb(99, 99, 99);
+}
+.debug-info {
+    /*position: fixed;*/
+    /*right: 0px;*/
+    /*top: 100px;*/
+    z-index: 3;
+    background-color: white;
+
+}
+.ng-include-header, .ng-include-menu, .ng-view-container {
+    position: fixed;
+    width: 100%;
+    z-index: 2;
+}
+.ng-include-header {
+    top: 0px;
+    left: 0px;
+}
+.ng-include-menu {
+    bottom: 0px;
+    left: 0px;
+}
+.ng-view-container {
+    z-index: 0;
+    top: 40px;
+
+
+}
+#btn_checkin {
+    float:right;
+    font-size:inherit;
+}
+.ng-include-header, md-toolbar#heading_bar {
+    max-height: 40px;
+    font-size: 16px;
+    min-height: 40px;
+}
+#nav_bar_bottom_wrapper {
+    max-height: 45px;
+    height: 45px;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    background-color: rgb(241, 241, 241);
+}
+
+/*#nav_bar_bottom {*/
+
+/*}*/
+#nav_bar_bottom ul {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: stretch;
+    height: 45px;
+}
+#nav_bar_bottom ul>li {
+    width: 25%;
+    height: 100%;
+    text-align: center;
+}
+#nav_bar_bottom ul>li a {
+    height: 100%;
+    width: 100%;
+    display: block;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-top: 25px;
+    background: url("../asserts/icons/background_nav_bar.png") no-repeat scroll;
+    background-position: 50% 20%;
+    -webkit-background-size: 15px 15px;
+    background-size: 15px 15px;
+}
+#nav_bar_bottom ul>li[aria-label="home"] a {
+    background-position: 50% 20%;
+}
+#nav_bar_bottom ul>li[aria-label="invest"] a {
+    background-position: 50% 20%;
+}
+#nav_bar_bottom ul>li[aria-label="personal_center"] a {
+    background-position: 50% 20%;
+}
+#nav_bar_bottom ul>li[aria-label="more"] a {
+    background-position: 50% 20%;
+}
+
+.menuBtn {
+    background-color: transparent;
+    border: none;
+    height: 38px;
+    margin: 16px 0 0 16px;
+    width: 36px;
+}
+md-toolbar h1 {
+    font-weight: normal;
+}
+md-list .md-button {
+    color: inherit;
+    font-weight: 500;
+    text-align: left;
+    width: 100%;
+}
+
+/* Using Data-URI converted from svg until <md-icon> becomes available
+https://github.com/google/material-design-icons
+*/
+.menuBtn {
+    background: transparent url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDI0IDI0IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGcgaWQ9IkhlYWRlciI+CiAgICA8Zz4KICAgICAgICA8cmVjdCB4PSItNjE4IiB5PSItMjIzMiIgZmlsbD0ibm9uZSIgd2lkdGg9IjE0MDAiIGhlaWdodD0iMzYwMCIvPgogICAgPC9nPgo8L2c+CjxnIGlkPSJMYWJlbCI+CjwvZz4KPGcgaWQ9Ikljb24iPgogICAgPGc+CiAgICAgICAgPHJlY3QgZmlsbD0ibm9uZSIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ii8+CiAgICAgICAgPHBhdGggZD0iTTMsMThoMTh2LTJIM1YxOHogTTMsMTNoMTh2LTJIM1YxM3ogTTMsNnYyaDE4VjZIM3oiIHN0eWxlPSJmaWxsOiNmM2YzZjM7Ii8+CiAgICA8L2c+CjwvZz4KPGcgaWQ9IkdyaWQiIGRpc3BsYXk9Im5vbmUiPgogICAgPGcgZGlzcGxheT0iaW5saW5lIj4KICAgIDwvZz4KPC9nPgo8L3N2Zz4=) no-repeat  center center;
+}
+
+/*custom md*/
+md-toolbar.md-default-theme {
+    background-color: #e65e5e;
+}
+
+
+#login_form md-input-container .md-input {
+    font-size: 30px;
+    line-height: 30px;
+    color: #999999;
+    padding-left: 20px;
+}
+#login_form md-input-container label:not(.md-no-float), #login_form md-input-container.md-input-focused label:not(.md-no-float), #login_form md-input-container.md-input-has-value label:not(.md-no-float) {
+    font-size: 30px;
+    line-height: 30px;
+    color: #999999;
+}
+#login_form md-input-container label:not(.md-no-float) {
+    font-size: 30px;
+    line-height: 30px;
+    padding-left: 20px;
+    position: relative;
+    bottom: -15px;
+    color: #999999;
+}
+
+#list_display_area {
+
+}

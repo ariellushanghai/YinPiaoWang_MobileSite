@@ -1,0 +1,32 @@
+
+<div layout="column">
+    <md-content id="login_form" md-theme="docs-dark" layout-padding>
+        <form name="login_form">
+            <md-input-container md-no-float>
+                <label>用户名</label>
+                <input ng-model="user.username" type="text" required name="username">
+                <div ng-messages="login_form.username.$error">
+                    <div ng-message="required">请输入用户名</div>
+                    <!--<div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>-->
+                </div>
+            </md-input-container>
+            <md-input-container>
+                <label>密码</label>
+                <input ng-model="user.password" type="password" required name="password">
+                <div ng-messages="login_form.username.$error">
+                    <div ng-message="required">请输入密码</div>
+                    <!--<div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>-->
+                </div>
+            </md-input-container>
+            <md-input-container>
+                <label>验证码</label>
+                <input ng-model="user.verify_code" type="text" required name="verify_code">
+                <div ng-messages="login_form.username.$error">
+                    <div ng-message="required">请输入验证码</div>
+                    <!--<div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>-->
+                </div>
+            </md-input-container>
+        </form>
+    </md-content>
+
+</div>
