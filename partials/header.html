@@ -1,15 +1,7 @@
 <div layout="column" ng-controller="header_controller">
-        <md-content layout="row" flex>
-            <md-toolbar id="heading_bar" class="md-default-theme" ng-cloak>
-                <div class="md-toolbar-tools">
-                    <span flex></span>
-                    <h2>首页</h2>
-                        <span flex>
-                        <md-button class="md-icon-button" id="btn_checkin">
-                            签到
-                        </md-button>
-                    </span>
-                </div>
-            </md-toolbar>
-        </md-content>
+    <header id="heading_bar" ng-cloak>
+        <a id="btn_header_register" href="#">注册</a>
+        <h1>{{getPageTitle()}}</h1>
+        <a id="btn_header_login" href="#">登录</a>
+    </header>
 </div>

@@ -94,7 +94,7 @@ footer a span{
     display: inline-block;
     width: 2em;
     height: 2em;
-    background: url("../img/foot_icon.png");
+    background: url("../asserts/icons/foot_icon.png");
     background-size: 8em 4em;
 }
 .foot_icon_1{
@@ -241,7 +241,7 @@ footer a span{
     font-weight: 700;
 }
 .hongxin{
-    background: url("../img/hongxin.png") no-repeat;
+    background: url("../asserts/icons/hongxin.png") no-repeat;
     background-size: 3em;
     background-position: right center;
     color: #777777;
@@ -282,7 +282,7 @@ footer a span{
 .login{
     width: 100%;
     min-height: 100%;
-    background: url("../img/login_bg.jpg") no-repeat;
+    background: url("../asserts/icons/login_bg.jpg") no-repeat;
     background-size: cover;
 }
 .login_logo{
@@ -501,7 +501,7 @@ footer a span{
     display: inline-block;
     width: 3em;
     height: 3em;
-    background: url("../img/jieshao.png") no-repeat;
+    background: url("../asserts/icons/jieshao.png") no-repeat;
     background-size: 15em 3em;
 }
 .js_ul li i.icon_js2{
@@ -555,7 +555,7 @@ footer a span{
     width: 1.2em;
     height: 1.2em;
     display: inline-block;
-    background: url("../img/yupiao.png") no-repeat;
+    background: url("../asserts/icons/yupiao.png") no-repeat;
     background-size: 1.2em 2.4em;
     text-indent: 8888px;
 }
@@ -590,7 +590,7 @@ footer a span{
     float: right;
     width: 2em;
     height: 2em;
-    background: url("../img/icon_more.png") center center no-repeat;
+    background: url("../asserts/icons/icon_more.png") center center no-repeat;
     background-size: 2em;
     margin-top: 1em;
 }
@@ -683,7 +683,7 @@ footer a span{
     display: inline-block;
     width: 1.2em;
     height: 1.2em;
-    background: url("../img/start5.png") right top no-repeat;
+    background: url("../asserts/icons/start5.png") right top no-repeat;
     background-size: 2.4em 2.4em;
     vertical-align: text-bottom;
 }
@@ -704,7 +704,7 @@ footer a span{
     font-size: 12px;
 }
 .icon_right{
-    background: url("../img/right_jiantou.png") right center no-repeat;
+    background: url("../asserts/icons/right_jiantou.png") right center no-repeat;
     background-size: 0.5em 1em;
     display: inline-block;
     float: right;
@@ -757,7 +757,7 @@ footer a span{
 
 /* 滑动开关 */
 .check_btn{
-    background:url("../img/check_btn.png") left center no-repeat;
+    background:url("../asserts/icons/check_btn.png") left center no-repeat;
     width: 3.2em;
     height: 2em;
     background-size: 6.4em 2em;
@@ -954,7 +954,7 @@ input.tzje_text{
     height: 1em;
     display: block;
     float: left;
-    background: url("../img/close_icon.png");
+    background: url("../asserts/icons/close_icon.png");
     background-size: 1em 1em;
 }
 .mask{
@@ -978,7 +978,7 @@ input.tzje_text{
     width: 4.5em;
     height: 4.5em;
     display: inline-block;
-    background: url("../img/icon_right.png") no-repeat;
+    background: url("../asserts/icons/icon_right.png") no-repeat;
     background-size: 4.5em 4.5em;
 }
 .qrgmts .grey{
@@ -1011,9 +1011,9 @@ input.tzje_text{
     width: 5em;
     height: 5em;
     display: inline-block;
-    background: url("../img/icon_right.png") no-repeat;
+    background: url("../asserts/icons/icon_right.png") no-repeat;
     background-size: 5em 5em;
-    background-image: url("../img/logo_cz.png");
+    background-image: url("../asserts/icons/logo_cz.png");
 }
 .Recharge_money{
     color: #333333;
@@ -1171,7 +1171,7 @@ input.input_none:focus{
     width: 1.2em;
     height: 1.2em;
     display: inline-block;
-    background-image: url("../img/icon_error.png");
+    background-image: url("../asserts/icons/icon_error.png");
     background-size: 1.2em 1.2em;
 }
 .email_div ul li i{
@@ -1237,7 +1237,7 @@ input.input_none:focus{
 }
 .mdyl_list_left{
     height: 70px;
-    background: url("../img/mdyl_logo.png") 0.6em 0.6em #e65e5e no-repeat;
+    background: url("../asserts/icons/mdyl_logo.png") 0.6em 0.6em #e65e5e no-repeat;
     background-size: 2.5em ;
     padding-left:0.8em;
     color: #ffffff;
@@ -1259,7 +1259,7 @@ input.input_none:focus{
     line-height: 14px;
 }
 .yinl{
-    background-image: url("../img/wdyl_logobg.png");
+    background-image: url("../asserts/icons/wdyl_logobg.png");
     background-size: 70px 70px;
     width: 70px;
     height: 70px;
@@ -1307,7 +1307,7 @@ input.input_none:focus{
     right: 0;
     width: 84px;
     height: 70px;
-    background-image: url("../img/ap30.png");
+    background-image: url("../asserts/icons/ap30.png");
     color: #666666;
     text-align: center;
     line-height: 70px;
@@ -1341,7 +1341,7 @@ input.input_none:focus{
     color: #333333;
 }
 .radio_btn{
-    background:url("../img/radio_btn.png") left top no-repeat;
+    background:url("../asserts/icons/radio_btn.png") left top no-repeat;
     width: 2em;
     height: 2em;
     background-size: 2em 4em;
@@ -1430,7 +1430,7 @@ input.input_none1:focus{
     top: 15px;
     width: 1.6em;
     height: 0.8em;
-    background: url("../img/bottom_jiantou.png");
+    background: url("../asserts/icons/bottom_jiantou.png");
     background-size: 1.6em 0.8em;
 }
 .select_btn option{
@@ -1597,7 +1597,7 @@ input.input_bor_none{
     height: 18px;
     display: block;
     float: right;
-    background: url("../img/more_icon.png") center center no-repeat;
+    background: url("../asserts/icons/more_icon.png") center center no-repeat;
     background-size: contain;
 }
 .mc_list li:last-of-type .money_mc1{
@@ -1623,7 +1623,7 @@ input.input_bor_none{
     color: #999999;
 }
 .mc_list_ul .btn_list .icon_tub{
-    background: url("../img/mc_icon.png");
+    background: url("../asserts/icons/mc_icon.png");
     background-size: 1.2em 8.4em;
     margin-right: 3px;
 }
@@ -1657,7 +1657,7 @@ input.input_bor_none{
 }
 
 .gengduo.mc_list_ul .btn_list .icon_tub{
-    background: url("../img/gd_icon.png");
+    background: url("../asserts/icons/gd_icon.png");
     background-size: 1.2em 8.4em;
 }
 .mc_list_ul .btn_list .icon_tub.icon_tub2{
@@ -1712,7 +1712,7 @@ input.input_bor_none{
     display: inline-block;
     height: 0.9em;
     width: 1.5em;
-    background-image: url("../img/vip_icon.png");
+    background-image: url("../asserts/icons/vip_icon.png");
     background-size: 1.5em 3.6em;
     margin-right: 4px;
 }
@@ -1720,7 +1720,7 @@ input.input_bor_none{
     display: inline-block;
     height: 0.9em;
     width: 2.1em;
-    background-image: url("../img/svip_icon.png");
+    background-image: url("../asserts/icons/svip_icon.png");
     background-size: 2.1em 1.8em;
 }
 .icon_vip0{
@@ -1740,7 +1740,7 @@ input.input_bor_none{
     width: 1em;
     height: 1em;
     display: inline-block;
-    background-image: url("../img/chuizi.png");
+    background-image: url("../asserts/icons/chuizi.png");
     background-size: 1em 1em;
     margin-right: 4px;
 }
@@ -1753,7 +1753,7 @@ input.input_bor_none{
     color: #e65e5e;
 }
 .title_rl{
-    background-image: url("../img/rili_title_bg.png");
+    background-image: url("../asserts/icons/rili_title_bg.png");
     background-size: 100% 100%;
     padding: 0 0.8em;
     margin-top: 35px;

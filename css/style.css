@@ -43,12 +43,56 @@ body {
 .ng-view-container {
     z-index: 0;
     top: 40px;
-
-
 }
-#btn_checkin {
-    float:right;
+header {
+    height: 40px;
+    line-height: 40px;
+    background-color: #e65e5e;
+    /*border-bottom: 1px solid #d23939;*/
+    text-align: center;
+    font-size: 18px;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+
+#btn_header_register {
+    order: 1;
+    flex: 0 1 auto;
+    align-self: auto;
+    min-width: 50px;
+    height: 100%;
     font-size:inherit;
+    display: block;
+    color: #ffffff;
+    padding-left: 0.8em;
+    font-size: 16px;
+}
+header h1 {
+    order: 2;
+    flex: 0 1 auto;
+    align-self: auto;
+    min-width: 70%;
+    height: 100%;
+    text-align: center;
+}
+#btn_header_login {
+    order: 3;
+    flex: 0 1 auto;
+    align-self: auto;
+    min-width: 50px;
+    height: 100%;
+    font-size:inherit;
+    display: block;
+    color: #ffffff;
+    padding-right: 0.8em;
+    font-size: 16px;
 }
 .ng-include-header, md-toolbar#heading_bar {
     max-height: 40px;
@@ -181,4 +225,7 @@ md-toolbar.md-default-theme {
 
 #list_display_area {
 
+}
+h1.title {
+    display: none;
 }
