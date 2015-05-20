@@ -1,17 +1,16 @@
-<!--<nav id="nav_bar_bottom" role="navigation" layout="column" ng-controller="menu_controller" ng-cloak>-->
-    <!--<ul>-->
-        <!--<li aria-label="main"><a href="#/">首页</a></li>-->
-        <!--<li aria-label="invest"><a href="#/invest">投资理财</a></li>-->
-        <!--<li aria-label="personal_center"><a href="#">个人中心</a></li>-->
-        <!--<li aria-label="more"><a href="#">更多</a></li>-->
-    <!--</ul>-->
-<!--</nav>-->
-
 <nav id="nav_bar_bottom" role="navigation" layout="column" ng-controller="menu_controller" ng-cloak>
     <ul>
-        <li aria-label="main"><a href="/">首页</a></li>
-        <li aria-label="invest"><a href="/invest">投资理财</a></li>
-        <li aria-label="personal_center"><a href="/personal_center">个人中心</a></li>
-        <li aria-label="more"><a href="#">更多</a></li>
+        <li aria-label="main" ng-class="{ active: isActive('/')}">
+            <a href="/"><span></span></br>首 页</a>
+        </li>
+        <li aria-label="invest" ng-class="{ active: isActive('/invest')}">
+            <a href="/invest"><span></span></br>投资理财</a>
+        </li>
+        <li aria-label="personal_center" ng-class="{ active: isActive('/personal_center')}">
+            <a href="/personal_center"><span></span></br>个人中心</a>
+        </li>
+        <li aria-label="more" ng-class="{ active: isActive('/more')}">
+            <a href="more"><span></span></br>更 多</a>
+        </li>
     </ul>
 </nav>

@@ -16,6 +16,9 @@ App.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
         }).when('/personal_center', {
             templateUrl: 'partials/personal_center.html',
             controller: 'personal_center_controller'
+        }).when('/more', {
+            templateUrl: 'partials/more.html',
+            controller: 'more_controller'
         }).otherwise({
             redirectTo: '/'
         });
@@ -44,6 +47,9 @@ App.controller('header_controller', ['$scope', '$http', '$location', '$route', '
     });
 }]);
 App.controller('menu_controller', ['$scope', '$http', '$location', '$route', '$routeParams', function($scope, $http, $location, $route, $routeParams) {
+    $scope.isActive = function (view_location) {
+        return view_location === $location.path();
+    };
     $http.get('JSONs/test_data.json').success(function(data) {
         //console.log('data: ', JSON.stringify(data));
     });
