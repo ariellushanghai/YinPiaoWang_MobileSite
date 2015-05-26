@@ -7,44 +7,84 @@ App.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
         when('/', {
             templateUrl: 'partials/main.html',
             controller: 'main_controller',
-            page_title: 'shouye'
+            page_title: '银票网'
 
         }).when('/invest', {
             templateUrl: 'partials/invest.html',
             controller: 'invest_controller',
-            page_title: 'touzi'
+            page_title: '投资列表'
+        }).when('/invest/:id', {
+            templateUrl: 'partials/invest_item_detail.html',
+            controller: 'invest_item_detail_controller',
+            page_title: '项目详情'
         }).when('/login', {
             templateUrl: 'partials/login.html',
-            controller: 'login_controller'
+            controller: 'login_controller',
+            page_title: '登录'
         }).when('/personal_center', {
             templateUrl: 'partials/personal_center.html',
-            controller: 'personal_center_controller'
+            controller: 'personal_center_controller',
+            page_title: '个人中心'
         }).when('/more', {
             templateUrl: 'partials/more.html',
-            controller: 'more_controller'
+            controller: 'more_controller',
+            page_title: '更多'
         }).otherwise({
             redirectTo: '/'
         });
     $locationProvider.html5Mode(true).hashPrefix('!');
 }]);
+//=======================   服务  =======================
+//项目列表
+App.factory('getNewProjectList', ['$http', function($http) {
+    var TEST_SERVER_BASE_URL = 'http://192.168.1.70/mobile/jsonp?url=';
+    var arg = encodeURIComponent("mobile/trade/invest/bill/list?type=0&page=1&num=10");
+    return {
+        getList: function(sucess, error) {
+            $http({
+                method: "JSONP",
+                url: TEST_SERVER_BASE_URL + arg + "&callback=JSON_CALLBACK"
+            }).then(sucess, error);
+        }
+    };
+}]);
+// 项目详情
+App.factory('getProjectDetail', ['$http', function($http) {
+    var TEST_SERVER_BASE_URL = 'http://192.168.1.70/mobile/jsonp?url=';
+    return {
+        getDetail: function(id, sucess, error) {
+            console.log('id: ',id);
+            var arg = encodeURIComponent("mobile/trade/invest/bill/detail?id=" + id);
+            console.log('url: ',TEST_SERVER_BASE_URL + arg + "&callback=JSON_CALLBACK");
+            $http({
+                method: "JSONP",
+                url: TEST_SERVER_BASE_URL + arg + "&callback=JSON_CALLBACK"
+            }).then(sucess, error);
+        }
+    };
+}]);
+
+//指令
+App.directive('myDirective', function() {
+    return {
+        restrict: "A",
+        replace: "true",
+        templateUrl: "partials/myDirective.html"
+
+    };
+});
+
+
 //页面标题栏
 App.controller('header_controller', ['$scope', '$http', '$location', '$route', '$routeParams', function ($scope, $http, $location, $route, $routeParams) {
     console.log($location);
     console.log($route);
-    console.log($routeParams);
-    $scope.page_titles = {
-        "/": "首 页",
-        "/invest": "登 录",
-        "/login": "更 多",
-        "/personal_center": "投资列表",
-        "/more": "我的账户"
-    };
+    console.log('$routeParams: ', $routeParams);
+
     $scope.getPageTitle = function () {
         //return $scope.page_titles[$location.path()];
         return $route.current.page_title;
     }
-    console.log("$scope.page_title: ",$scope.page_title);
-    console.log("$route.current: ",$route.current.page_title);
 }]);
 //底部导航条
 App.controller('menu_controller', ['$scope', '$http', '$location', '$route', '$routeParams', function ($scope, $http, $location, $route, $routeParams) {
@@ -58,31 +98,47 @@ App.controller('main_controller', ['$scope', '$http', '$location', '$route', '$r
     $scope.$location = $location;
     $scope.$routeParams = $routeParams;
 }]);
+//登陆
 App.controller('login_controller', ['$scope', '$http', '$location', '$route', '$routeParams', function ($scope, $http, $location, $route, $routeParams) {
 
 }]);
+//更多
 App.controller('more_controller', ['$scope', '$http', '$location', '$route', '$routeParams', function ($scope, $http, $location, $route, $routeParams) {
 
 }]);
+//投资列表
+App.controller('invest_controller', ['$scope', '$http', '$location', '$route', '$routeParams', 'getNewProjectList', function ($scope, $http, $location, $route, $routeParams, getNewProjectList) {
+    $scope.billTypeList = ['待购买','银票纯','银票红','银商','转让','第三方平台'];
+    getNewProjectList.getList(function(res) {
+        console.log('sucess: ', res.data.data);
+        $scope.itemList = res.data.data;
 
-App.controller('invest_controller', ['$scope', '$http', '$location', '$route', '$routeParams', 'getNewProjectList_Factory', function ($scope, $http, $location, $route, $routeParams, getNewProjectList_Factory) {
-
-    //getNewProjectList_Factory.get({},
-    //    function success(response) {
-    //        console.log("Success:" + JSON.stringify(response));
-    //        $scope.newProjectList = response;
-    //    },
-    //    function error(errorResponse) {
-    //        console.log("Error:" + JSON.stringify(errorResponse));
-    //    }
-    //);
+    },function(res) {
+        console.log('err: ',res);
+    });
 }]);
+//项目详情
+App.controller('invest_item_detail_controller', ['$scope', '$http', '$location', '$route', '$routeParams', 'getProjectDetail', function ($scope, $http, $location, $route, $routeParams, getProjectDetail) {
+    var billId = $routeParams.id.replace(':' , '');
+    getProjectDetail.getDetail(billId, function(res) {
+        console.log('sucess: ', res.data.data);
+        $scope.item = res.data.data;
+        $scope.isYue = ($scope.item.isYue == 0)? false: true;
+        $scope.isPiao = ($scope.item.isPiao == 0)? false: true;
+
+    },function(res) {
+        console.log('err: ',res);
+    });
+
+}]);
+//个人中心
 App.controller('personal_center_controller', ['$scope', '$http', '$location', '$route', '$routeParams', function ($scope, $http, $location, $route, $routeParams) {
 
     $scope.$route = $route;
     $scope.$location = $location;
     $scope.$routeParams = $routeParams;
 }]);
+//首页
 App.controller('index_page_controller', ['$scope', '$http', '$location', '$route', '$routeParams', function ($scope, $http, $location, $route, $routeParams) {
 
 }]);

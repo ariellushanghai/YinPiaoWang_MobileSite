@@ -1,0 +1,40 @@
+<!-- 投资列表 -->
+<section>
+
+    <div class="nav_list">
+        <ul>
+            <li><a ng-href="#" class="current">全部</a></li>
+            <li><a ng-href="#">银票理财</a></li>
+            <li><a ng-href="#">银商理财</a></li>
+            <li><a ng-href="#">转让项目</a></li>
+            <li><a ng-href="#">第三方平台</a></li>
+        </ul>
+        <div class="cl"></div>
+    </div>
+
+
+    <ul class="xm_list" ng-show="itemList">
+        <li ng-repeat="item in itemList">
+            <a ng-href="/invest/:{{item.billId}}" class="content">
+                <div class="Percentage wid25">
+                    <div class="process-con"></div>
+                    <div class="process-num">{{item.billPogress + '%'}}</div>
+                </div>
+                <div class="wid75">
+                    <h3><span class="zhr">{{billTypeList[item.billType]}}</span>{{item.billName}}</h3>
+                    <ul class="zxxm_ul">
+                        <li><span class="nub_red">{{item.billApr}}</span> %
+                            <br />年化收益率</li>
+                        <li><span class="nub_red nub_glay">{{item.billDay}}</span> 天
+                            <br />项目期限</li>
+                        <li><span class="nub_red nub_glay">{{item.billMoney}}</span> 万
+                            <br />融资金额</li>
+                    </ul>
+                </div>
+                <div class="cl"></div>
+            </a>
+        </li>
+
+    </ul>
+</section>
+<!-- 投资列表 END -->
