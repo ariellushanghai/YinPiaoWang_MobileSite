@@ -30,12 +30,12 @@ input[type=text],input[type=number],input[type=email],input[type=password]{
 
 /* header */
 header{
-    height: 45px;
-    line-height: 45px;
-    background-color: #e65e5e;
-    border-bottom: 1px solid #d23939;
-    text-align: center;
-    font-size: 18px;
+    /*height: 45px;*/
+    /*line-height: 45px;*/
+    /*background-color: #e65e5e;*/
+    /*border-bottom: 1px solid #d23939;*/
+    /*text-align: center;*/
+    /*font-size: 18px;*/
 }
 header h1{
     font-weight: 400;

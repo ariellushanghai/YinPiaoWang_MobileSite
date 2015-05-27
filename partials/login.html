@@ -1,32 +1,18 @@
-
-<div layout="column">
-    <md-content id="login_form" md-theme="docs-dark" layout-padding>
-        <form name="login_form">
-            <md-input-container md-no-float>
-                <label>用户名</label>
-                <input ng-model="user.username" type="text" required name="username">
-                <div ng-messages="login_form.username.$error">
-                    <div ng-message="required">请输入用户名</div>
-                    <!--<div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>-->
-                </div>
-            </md-input-container>
-            <md-input-container>
-                <label>密码</label>
-                <input ng-model="user.password" type="password" required name="password">
-                <div ng-messages="login_form.username.$error">
-                    <div ng-message="required">请输入密码</div>
-                    <!--<div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>-->
-                </div>
-            </md-input-container>
-            <md-input-container>
-                <label>验证码</label>
-                <input ng-model="user.verify_code" type="text" required name="verify_code">
-                <div ng-messages="login_form.username.$error">
-                    <div ng-message="required">请输入验证码</div>
-                    <!--<div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>-->
-                </div>
-            </md-input-container>
-        </form>
-    </md-content>
-
-</div>
+<section class="login">
+    <!-- logo -->
+    <div class="login_logo"><img src="asserts/icons/loging_logo.png" alt="" /></div>
+    <!-- 登录表单 -->
+    <section class="login_con">
+        <p>
+            <!--<input type="text" placeholder="用户名" ng-model="username" />-->
+            <input type="text" placeholder="15221010896" ng-model="username" /> </p>
+        <p>
+            <input type="password" placeholder="111111" ng-model="password" /> </p>
+        <p class="login_position">
+            <input type="text" placeholder="验证码" ng-model="checkcode" ng-minlength="4" ng-maxlength="4" /> <img src="" id="check_img" /> </p>
+        <p><span class="error">sss</span></p>
+        <p>
+            <input type="button" value="登&nbsp;&nbsp;&nbsp;&nbsp;录" class="login_btn" ng-disabled="!username && !password && !checkcode" /> </p>
+        <p class="fgpwd"> <a href="#">忘记密码？</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">注册新用户</a> </p>
+    </section>
+</section>
