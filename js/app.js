@@ -48,25 +48,23 @@ App.factory('loginService', ['$http', function ($http) {
         }
     };
 }]);
-//项目列表
-App.factory('getNewProjectList', ['$http', function ($http) {
+//项目服务
+//对相同的API的操作并到一个factory里，可以共用一个常量URL
+App.factory('factoryInvestList', ['$http', '$cacheFactory', function ($http, $cacheFactory) {
     var TEST_SERVER_BASE_URL = 'http://192.168.1.70/mobile/jsonp?url=';
-    var arg = encodeURIComponent("mobile/trade/invest/bill/list?type=0&page=1&num=10");
+    var lru = $cacheFactory('lru', {capacity: 5});//缓存5次请求
     return {
+        //项目列表
         getList: function (sucess, error) {
+            var arg = encodeURIComponent("mobile/trade/invest/bill/list?type=0&page=1&num=10");
             $http({
                 method: "JSONP",
-                url: TEST_SERVER_BASE_URL + arg + "&callback=JSON_CALLBACK"
+                url: TEST_SERVER_BASE_URL + arg + "&callback=JSON_CALLBACK",
+                cache: lru
             }).then(sucess, error);
-        }
-    };
-}]);
-// 项目详情
-App.factory('getProjectDetail', ['$http', function ($http) {
-    var TEST_SERVER_BASE_URL = 'http://192.168.1.70/mobile/jsonp?url=';
-    return {
+        },
+        //项目详情
         getDetail: function (id, sucess, error) {
-            console.log('id: ', id);
             var arg = encodeURIComponent("mobile/trade/invest/bill/detail?id=" + id);
             console.log('url: ', TEST_SERVER_BASE_URL + arg + "&callback=JSON_CALLBACK");
             $http({
@@ -76,6 +74,7 @@ App.factory('getProjectDetail', ['$http', function ($http) {
         }
     };
 }]);
+
 //指令
 App.directive('myDirective', function () {
     return {
@@ -122,9 +121,9 @@ App.controller('login_controller', ['$scope', '$http', '$location', '$route', '$
 //更多
 App.controller('more_controller', ['$scope', '$http', '$location', '$route', '$routeParams', function ($scope, $http, $location, $route, $routeParams) {}]);
 //投资列表
-App.controller('invest_controller', ['$scope', '$http', '$location', '$route', '$routeParams', 'getNewProjectList', function ($scope, $http, $location, $route, $routeParams, getNewProjectList) {
+App.controller('invest_controller', ['$scope', '$http', '$location', '$route', '$routeParams', 'factoryInvestList', function ($scope, $http, $location, $route, $routeParams, factoryInvestList) {
     $scope.billTypeList = ['待购买', '银票纯', '银票红', '银商', '转让', '第三方平台'];
-    getNewProjectList.getList(function (res) {
+    factoryInvestList.getList(function (res) {
         console.log('sucess: ', res.data.data);
         $scope.itemList = res.data.data;
     }, function (res) {
@@ -132,9 +131,9 @@ App.controller('invest_controller', ['$scope', '$http', '$location', '$route', '
     });
 }]);
 //项目详情
-App.controller('invest_item_detail_controller', ['$scope', '$http', '$location', '$route', '$routeParams', 'getProjectDetail', function ($scope, $http, $location, $route, $routeParams, getProjectDetail) {
+App.controller('invest_item_detail_controller', ['$scope', '$http', '$location', '$route', '$routeParams', 'factoryInvestList', function ($scope, $http, $location, $route, $routeParams, factoryInvestList) {
     var billId = $routeParams.id.replace(':', '');
-    getProjectDetail.getDetail(billId, function (res) {
+    factoryInvestList.getDetail(billId, function (res) {
         console.log('sucess & data: ', res.data.data);
         $scope.item = res.data.data;
     }, function (res) {
