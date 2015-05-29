@@ -33,7 +33,9 @@ App.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
         });
     $locationProvider.html5Mode(true).hashPrefix('!');
     $httpProvider.defaults.headers.common['Cache-Control'] = 'no-cache';
+    //$httpProvider.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"};
     $httpProvider.defaults.withCredentials = true;
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
 }]);
 
 App.run(function ($rootScope) {
@@ -89,19 +91,20 @@ App.factory('loginService', ['$http', '$cookies', function ($http, $cookies) {
             $("#check_img").prop("src", canvas.toDataURL("image/png"));
         },
         login: function (cred, sucess, error) {
-            console.log('cred: ', cred);
             var shit = {
                 name: cred.username,
                 password: cred.password,
-                checkcode: cred.checkCode.toLowerCase()
+                checkCode: cred.checkCode.toLowerCase()
             };
             console.log(JSON.stringify(shit));
             var arg = encodeURIComponent("/mobile/user/login?jsonInput=" + JSON.stringify(shit));
             $http({
                 method: "JSONP",
                 url: TEST_SERVER_BASE_URL,
+                headers: {"Authorization": "Basic " + $cookies.redisName},
                 params: {
                     "url": arg,
+                    "redisName": $cookies.redisName,
                     "callback": "JSON_CALLBACK"
                 }
             }).then(sucess, error);
