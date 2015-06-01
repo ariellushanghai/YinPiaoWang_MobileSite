@@ -44,13 +44,31 @@ App.run(function ($rootScope) {
     }
 });
 //=======================   服务  =======================
-//登陆服务
-App.factory('loginService', ['$http', '$cookies', function ($http, $cookies) {
-    var TEST_SERVER_BASE_URL = 'http://192.168.1.70/mobile/jsonp';
-    var TEST_SERVER_BASE_URL_checkimage = 'http://test2.yinpiao.com/jsonp';
-    var CAPTCHA_SERVER_BASE_URL = '/verification/checkImage';
-
+App.factory('userInfo', ['$http', '$cookies', function ($http, $cookies) {
+    var user_info = {};
     return {
+        setUserInfo: function(obj) {
+            user_info = obj;
+        },
+        getUserInfo: function () {
+            return user_info;
+        }
+    }
+}]);
+//登陆服务
+App.factory('loginService', ['$http', '$cookies', '$location', 'userInfo', function ($http, $cookies, $location, userInfo) {
+    //var TEST_SERVER_BASE_URL = 'http://192.168.1.70/mobile/jsonp';
+    var TEST_SERVER_BASE_URL = 'http://192.168.1.174/mobile/jsonp';
+    //var TEST_SERVER_BASE_URL_checkimage = 'http://test2.yinpiao.com/jsonp';
+    var TEST_SERVER_BASE_URL_checkimage = 'http://192.168.1.174:8080/jsonp';
+    var CAPTCHA_SERVER_BASE_URL = '/verification/checkImage';
+    var uid = null;
+    var token = null;
+    console.log(userInfo.getUserInfo());
+    return {
+        isLoggedIn: function() {
+            return uid !== null && token !== null;
+        },
         fetchCaptcha: function (sucess, error) {
             $http({
                 method: "JSONP",
@@ -90,7 +108,8 @@ App.factory('loginService', ['$http', '$cookies', function ($http, $cookies) {
             }
             $("#check_img").prop("src", canvas.toDataURL("image/png"));
         },
-        login: function (cred, sucess, error) {
+        login: function (cred) {
+        //login: function (cred, sucess, error) {
             var shit = {
                 name: cred.username,
                 password: cred.password,
@@ -101,23 +120,40 @@ App.factory('loginService', ['$http', '$cookies', function ($http, $cookies) {
             $http({
                 method: "JSONP",
                 url: TEST_SERVER_BASE_URL,
-                headers: {"Authorization": "Basic " + $cookies.redisName},
                 params: {
                     "url": arg,
                     "redisName": $cookies.redisName,
                     "callback": "JSON_CALLBACK"
                 }
-            }).then(sucess, error);
+            }).then(function success(res) {
+                console.log("res: ", JSON.stringify(res));
+                if(res.data.result == 0) {
+                    userInfo.setUserInfo(res.data.data);
+                    uid = res.data.data.userId;
+                    token = res.data.data.token;
+                    console.log('userInfo: ', userInfo.getUserInfo());
+                    $location.path('/personal_center').replace();
+                }
+            }, function error(err) {
+                console.log('Login failed: ',err)
+            });
         },
         setCookie: function (obj) {
             $cookies.redisName = obj;
+        },
+        get_uid_token: function() {
+            return {
+                "uid": uid,
+                "token": token
+            }
         }
     };
 }]);
 //项目服务
 //对相同的API的操作并到一个factory里，可以共用一个常量URL
 App.factory('factoryInvestList', ['$http', '$cacheFactory', function ($http, $cacheFactory) {
-    var TEST_SERVER_BASE_URL = 'http://192.168.1.70/mobile/jsonp';
+    //var TEST_SERVER_BASE_URL = 'http://192.168.1.70/mobile/jsonp';
+    var TEST_SERVER_BASE_URL = 'http://192.168.1.174/mobile/jsonp';
     var lru = $cacheFactory('lru', {
         capacity: 5
     }); //缓存5次请求
@@ -150,7 +186,32 @@ App.factory('factoryInvestList', ['$http', '$cacheFactory', function ($http, $ca
         }
     };
 }]);
-
+//个人中心
+App.factory('factoryPersonalCenter', ['$http', '$cacheFactory', 'loginService', function ($http, $cacheFactory, loginService) {
+    //var TEST_SERVER_BASE_URL = 'http://192.168.1.70/mobile/jsonp';
+    var TEST_SERVER_BASE_URL = 'http://192.168.1.174/mobile/jsonp';
+    return {
+        fetchData: function() {
+            console.log('fetchData');
+            var arg = encodeURIComponent("mobile/user/customerAccount");
+            console.log()
+            $http({
+                method: "JSONP",
+                url: TEST_SERVER_BASE_URL,
+                params: {
+                    "url": arg,
+                    "callback": "JSON_CALLBACK",
+                    "uid": loginService.get_uid_token().uid,
+                    "token":loginService.get_uid_token().token
+                }
+            }).then(function(res) {
+                console.log('sucess: ',res);
+            }, function(res) {
+                console.log('err: ',res);
+            });
+        }
+    }
+}]);
 //指令
 App.directive('myDirective', function () {
     return {
@@ -179,13 +240,18 @@ App.controller('main_controller', ['$scope', '$http', '$location', '$route', '$r
 }]);
 //登陆
 App.controller('login_controller', ['$scope', '$http', '$location', '$route', '$routeParams', 'loginService', function ($scope, $http, $location, $route, $routeParams, loginService) {
-    loginService.fetchCaptcha(function (res) {
-        console.log('验证码返回：', res.data);
-        loginService.txtToCaptcha(res.data.checkCode);
-        loginService.setCookie(res.data.redisName);
-    }, function (res) {
-        console.log('err: ', res);
-    });
+
+    $scope.fetchCaptcha = function() {
+        loginService.fetchCaptcha(function (res) {
+            console.log('验证码返回：', res.data);
+            loginService.txtToCaptcha(res.data.checkCode);
+            loginService.setCookie(res.data.redisName);
+        }, function (res) {
+            console.log('err: ', res);
+        });
+    };
+
+    $scope.fetchCaptcha();
 
     $scope.login = function () {
         var cred = {
@@ -193,11 +259,12 @@ App.controller('login_controller', ['$scope', '$http', '$location', '$route', '$
             password: $scope.password,
             checkCode: $scope.checkCode
         };
-        loginService.login(cred, function (res) {
-            console.log('success: ', res);
-        }, function (res) {
-            console.log('err: ', res);
-        });
+        //loginService.login(cred, function (res) {
+        //    console.log('success: ', res);
+        //}, function (res) {
+        //    console.log('err: ', res);
+        //});
+        loginService.login(cred);
     }
 }]);
 //更多
@@ -223,10 +290,11 @@ App.controller('invest_item_detail_controller', ['$scope', '$http', '$location',
     });
 }]);
 //个人中心
-App.controller('personal_center_controller', ['$scope', '$http', '$location', '$route', '$routeParams', function ($scope, $http, $location, $route, $routeParams) {
-    $scope.$route = $route;
-    $scope.$location = $location;
-    $scope.$routeParams = $routeParams;
+App.controller('personal_center_controller', ['$scope', '$http', '$location', '$route', '$routeParams', 'userInfo', 'factoryPersonalCenter' , function ($scope, $http, $location, $route, $routeParams, userInfo, factoryPersonalCenter) {
+    $scope.fetchData = function() {
+        factoryPersonalCenter.fetchData();
+    };
+    $scope.fetchData();
 }]);
 //首页
 App.controller('index_page_controller', ['$scope', '$http', '$location', '$route', '$routeParams', function ($scope, $http, $location, $route, $routeParams) {}]);

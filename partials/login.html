@@ -11,7 +11,7 @@
         </p>
         <p class="login_position">
             <input type="text" placeholder="验证码" ng-model="checkCode"/>
-            <img src="" id="check_img" />
+            <img src="" id="check_img" ng-click="fetchCaptcha()"/>
         </p>
         <p>
             <input type="button" value="登&nbsp;&nbsp;&nbsp;&nbsp;录" class="login_btn" ng-disabled="!username" ng-click="login()"/>
