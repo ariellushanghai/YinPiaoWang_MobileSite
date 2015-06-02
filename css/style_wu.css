@@ -1549,6 +1549,10 @@ input.input_bor_none{
     position: relative;
     z-index: 1;
     line-height: 25px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
 }
 .myAccount h4{
     font-size: 12px;
