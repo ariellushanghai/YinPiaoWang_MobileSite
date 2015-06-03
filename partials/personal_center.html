@@ -22,14 +22,15 @@
             <b>已回收本金（元）</b>
             <span class="money_mc1">{{data.allBackMoney}}</span>
         </li>
-        <!--<li>-->
-            <!--<b>银钱罐今日利率（元）</b>-->
-            <!--<span class="money_mc1">4.80%</span>-->
-        <!--</li>-->
         <li>
             <b>预期总收益（元）</b>
             <span class="money_mc1">{{data.totalProfit}}</span>
         </li>
+        <li style="visibility: hidden">
+            <b>银钱罐今日利率（元）</b>
+            <span class="money_mc1"></span>
+        </li>
+
         <li>
             <a href="#">
                 <b>账户余额（元）<i class="more_icon"></i></b>
@@ -46,13 +47,13 @@
             <i class="icon_tub icon_tub1"></i> 我的投资
             <i class="icon_right"></i>
         </a></li>
-        <!--<li><a href="#" class="btn_list">
-            <i class="icon_tub icon_tub2"></i> 银钱罐
-            <i class="icon_right">关闭</i>
-        </a></li>-->
+        <!--<li><a href="#" class="btn_list">-->
+            <!--<i class="icon_tub icon_tub2"></i> 银钱罐-->
+            <!--<i class="icon_right"></i>-->
+        <!--</a></li>-->
         <li><a href="#" class="btn_list">
             <i class="icon_tub icon_tub3"></i> 预约小助手
-            <i class="icon_right">关闭</i>
+            <i class="icon_right">{{onOff[data.isOpen]}}</i>
         </a></li>
         <li><a href="#" class="btn_list">
             <i class="icon_tub icon_tub4"></i> 我的银票
