@@ -43,11 +43,11 @@ App.run(function ($rootScope) {
 });
 //=======================   服务  =======================
 App.factory('globals', [function (globals) {
-    // server addresses
     var ADMIN_SERVER = 'http://192.168.1.70/mobile/jsonp';
     var TEST_2_SERVER = 'http://192.168.1.70:8080/jsonp';
-    // CAPTCHA_SERVER_BASE_URL: '/verification/checkImage',
     var ADDRESS = {};
+    // ================================================================================
+    // ================================================================================
     // 砸金蛋
     ADDRESS.HIT_EGG = encodeURIComponent("app/activities/zajindankh");
     // 网银充值
@@ -246,12 +246,10 @@ App.factory('userInfo', ['$http', '$cookies', function ($http, $cookies) {
     }
 }]);
 //登陆服务
-App.factory('loginService', ['$http', '$cookies', '$location', 'userInfo', function ($http, $cookies, $location, userInfo) {
-    //var TEST_SERVER_BASE_URL = 'http://192.168.1.70/mobile/jsonp';
-    var TEST_SERVER_BASE_URL = 'http://192.168.1.174/mobile/jsonp';
-    //var TEST_SERVER_BASE_URL_checkimage = 'http://test2.yinpiao.com/jsonp';
-    var TEST_SERVER_BASE_URL_checkimage = 'http://192.168.1.174:8080/jsonp';
-    var CAPTCHA_SERVER_BASE_URL = '/verification/checkImage';
+App.factory('loginService', ['$http', '$cookies', '$location', 'globals', 'userInfo', function ($http, $cookies, $location, globals, userInfo) {
+    console.log(globals.ADMIN_SERVER);
+    console.log(globals.TEST_2_SERVER);
+
     var uid = null;
     var token = null;
     return {
@@ -262,9 +260,9 @@ App.factory('loginService', ['$http', '$cookies', '$location', 'userInfo', funct
             var self = this;
             $http({
                 method: "JSONP",
-                url: TEST_SERVER_BASE_URL_checkimage,
+                url: globals.TEST_2_SERVER,
                 params: {
-                    "url": encodeURIComponent(CAPTCHA_SERVER_BASE_URL),
+                    "url": globals.ADDRESS.SMS_REG_PIC,
                     "callback": "JSON_CALLBACK"
                 }
             }).then(function (res) {
@@ -309,10 +307,10 @@ App.factory('loginService', ['$http', '$cookies', '$location', 'userInfo', funct
                 checkCode: cred.checkCode.toLowerCase()
             };
             //console.log(JSON.stringify(shit));
-            var arg = encodeURIComponent("/mobile/user/login?jsonInput=" + JSON.stringify(shit));
+            var arg = globals.ADDRESS.LOGIN + encodeURIComponent("?jsonInput=" + JSON.stringify(shit));
             $http({
                 method: "JSONP",
-                url: TEST_SERVER_BASE_URL,
+                url: globals.ADMIN_SERVER,
                 params: {
                     "url": arg,
                     "redisName": $cookies.redisName,
@@ -346,19 +344,17 @@ App.factory('loginService', ['$http', '$cookies', '$location', 'userInfo', funct
 }]);
 //项目服务
 //对相同的API的操作并到一个factory里，可以共用一个常量URL
-App.factory('factoryInvestList', ['$http', '$cacheFactory', function ($http, $cacheFactory) {
-    //var TEST_SERVER_BASE_URL = 'http://192.168.1.70/mobile/jsonp';
-    var TEST_SERVER_BASE_URL = 'http://192.168.1.174/mobile/jsonp';
+App.factory('factoryInvestList', ['$http', '$cacheFactory', 'globals', function ($http, $cacheFactory, globals) {
     var lru = $cacheFactory('lru', {
         capacity: 5
     }); //缓存5次请求
     return {
         //项目列表
         getList: function (sucess, error) {
-            var arg = encodeURIComponent("mobile/trade/invest/bill/list?type=0&page=1&num=10");
+            var arg = globals.ADDRESS.List + encodeURIComponent("?type=0&page=1&num=10");
             $http({
                 method: "JSONP",
-                url: TEST_SERVER_BASE_URL,
+                url: globals.ADMIN_SERVER,
                 params: {
                     "url": arg,
                     "callback": "JSON_CALLBACK"
@@ -368,11 +364,10 @@ App.factory('factoryInvestList', ['$http', '$cacheFactory', function ($http, $ca
         },
         //项目详情
         getDetail: function (id, sucess, error) {
-            var arg = encodeURIComponent("mobile/trade/invest/bill/detail?id=" + id);
-            console.log('url: ', TEST_SERVER_BASE_URL + arg + "&callback=JSON_CALLBACK");
+            var arg = globals.ADDRESS.Detail + encodeURIComponent("?id=" + id);
             $http({
                 method: "JSONP",
-                url: TEST_SERVER_BASE_URL,
+                url: globals.ADMIN_SERVER,
                 params: {
                     "url": arg,
                     "callback": "JSON_CALLBACK"
@@ -382,18 +377,15 @@ App.factory('factoryInvestList', ['$http', '$cacheFactory', function ($http, $ca
     };
 }]);
 //个人中心
-App.factory('factoryPersonalCenter', ['$http', '$cacheFactory', '$rootScope', 'loginService', function ($http, $cacheFactory, $rootScope, loginService) {
-    var this_service = this;
-    //var TEST_SERVER_BASE_URL = 'http://192.168.1.70/mobile/jsonp';
-    var TEST_SERVER_BASE_URL = 'http://192.168.1.174/mobile/jsonp';
+App.factory('factoryPersonalCenter', ['$http', '$cacheFactory', '$rootScope', 'loginService', 'globals', function ($http, $cacheFactory, $rootScope, loginService, globals) {
     var data = {};
     return {
         fetchData: function () {
             var self = this;
-            var arg = encodeURIComponent("mobile/user/customerAccount");
+            var arg = globals.ADDRESS.GET_CUSTOMERACCOUNT;
             return $http({
                 method: "JSONP",
-                url: TEST_SERVER_BASE_URL,
+                url: globals.ADMIN_SERVER,
                 params: {
                     "url": arg,
                     "callback": "JSON_CALLBACK",
