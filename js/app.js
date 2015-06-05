@@ -313,9 +313,16 @@ App.factory('FetchDataService', ['$http', '$cookies', '$location', '$q', 'global
                 if (res.data.result == 0) {
                     console.log('FetchDataService.fetchData() sucess: ', res);
                     d.resolve(warehouse.set(key, res.data.data));
+                } else if(res.data.result == 1) {
+                    //数据不可用
+                    d.reject('吊打余棋')
+                } else if(res.data.result == 2) {
+                    //认证失败
+                    globals.set_uid_token(null,null);
+                    $location.path('/login').replace();
                 } else {
-                    alert('L316:怪余祺');
-                    d.reject('怪余祺')
+                    alert('吊打余棋');
+                    d.reject('吊打余棋')
                 }
             }, function failed(res) {
                 console.log('err: ', res);
