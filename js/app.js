@@ -284,22 +284,25 @@ App.factory('Warehouse', ['$rootScope', function ($rootScope) {
 }]);
 //通用请求数据服务（登陆以后）
 App.factory('FetchDataService', ['$http', '$cookies', '$location', '$q', 'globals', 'Warehouse', function ($http, $cookies, $location, $q, globals, Warehouse) {
-    console.log('globals: ', globals);
-    //var uid = globals.get_uid_token().uid;
-    //var token = globals.get_uid_token().token;
-    console.log(globals.get_uid_token().uid);
-    console.log(globals.get_uid_token().token)
+    //console.log(globals.get_uid_token().uid);
+    //console.log(globals.get_uid_token().token)
     var warehouse = Warehouse;
     return {
         fetchData: function (key, server_url) {
             console.log('FetchDataService.fetchData(key: ', key, 'server_url: ', server_url, ')');
             var uid = globals.get_uid_token().uid;
+            if (uid === null) {
+                uid = '';
+            }
             var token = globals.get_uid_token().token;
+            if (token === null) {
+                token = '';
+            }
             var arg = globals.ADDRESS[key];
             var d = $q.defer();
             var server_url = globals[server_url] || globals.ADMIN_SERVER;
-            console.log('server_url: ', server_url);
-            console.log('arg: ', arg);
+            //console.log('server_url: ', server_url);
+            //console.log('arg: ', arg);
             $http({
                 method: "JSONP",
                 url: server_url,
@@ -411,7 +414,7 @@ App.factory('loginService', ['$http', '$cookies', '$location', 'globals', 'userI
             });
         },
         txtToCaptcha: function (txt) {
-            console.log('txtToCaptcha(', txt, ')');
+            //console.log('txtToCaptcha(', txt, ')');
             var canvas = document.createElement("canvas");
             canvas.setAttribute('width', 120);
             canvas.setAttribute('height', 38);
