@@ -23,6 +23,10 @@ App.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
         templateUrl: 'partials/personal_center.html',
         controller: 'personal_center_controller',
         page_title: '个人中心'
+    }).when('/personal_center/my_investments/:id', {
+        templateUrl: 'partials/my_investments.html',
+        controller: 'personal_center_my_investments_controller',
+        page_title: '我的投资'
     }).when('/more', {
         templateUrl: 'partials/more.html',
         controller: 'more_controller',
@@ -36,16 +40,18 @@ App.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
     $httpProvider.defaults.withCredentials = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 }]);
-App.run(function ($rootScope) {
-    $rootScope.log = function (str) {
-        console.log(str);
-    }
-});
+App.run(['$rootScope', '$location', '$cookies', 'authHttpResponseInterceptor', function ($rootScope, $location, $cookies, authHttpResponseInterceptor) {
+    $rootScope.$on('$routeChangeSuccess', function (evt, curr_route, prev_route) {
+        //Interceptor.log(curr_route);
+    });
+}]);
 //=======================   服务  =======================
-App.factory('globals', [function (globals) {
+App.factory('globals', [function () {
     var ADMIN_SERVER = 'http://192.168.1.70/mobile/jsonp';
     var TEST_2_SERVER = 'http://192.168.1.70:8080/jsonp';
     var ADDRESS = {};
+    var uid = null;
+    var token = null;
     // ================================================================================
     // ================================================================================
     // 砸金蛋
@@ -231,7 +237,17 @@ App.factory('globals', [function (globals) {
     return {
         ADMIN_SERVER: ADMIN_SERVER,
         TEST_2_SERVER: TEST_2_SERVER,
-        ADDRESS: ADDRESS
+        ADDRESS: ADDRESS,
+        get_uid_token: function () {
+            return {
+                "uid": uid,
+                "token": token
+            }
+        },
+        set_uid_token: function (u, t) {
+            uid = u;
+            token = t;
+        }
     }
 }]);
 App.factory('userInfo', ['$http', '$cookies', function ($http, $cookies) {
@@ -245,18 +261,132 @@ App.factory('userInfo', ['$http', '$cookies', function ($http, $cookies) {
         }
     }
 }]);
+//持有返回数据
+App.factory('Warehouse', ['$rootScope', function ($rootScope) {
+    var data = {};
+    return {
+        get: function (key) {
+            if (_.isUndefined(data.key)) {
+                console.log('data.', key, ' is undefined');
+                return undefined;
+            } else {
+                return data.key;
+            }
+        },
+        set: function (key, value) {
+            data.key = value;
+            return data.key;
+        },
+        remove: function (key) {
+            delete data.key;
+        }
+    }
+}]);
+//通用请求数据服务（登陆以后）
+App.factory('FetchDataService', ['$http', '$cookies', '$location', '$q', 'globals', 'Warehouse', function ($http, $cookies, $location, $q, globals, Warehouse) {
+    console.log('globals: ', globals);
+    //var uid = globals.get_uid_token().uid;
+    //var token = globals.get_uid_token().token;
+    console.log(globals.get_uid_token().uid);
+    console.log(globals.get_uid_token().token)
+    var warehouse = Warehouse;
+    return {
+        fetchData: function (key, server_url) {
+            console.log('FetchDataService.fetchData(key: ', key, 'server_url: ', server_url, ')');
+            var uid = globals.get_uid_token().uid;
+            var token = globals.get_uid_token().token;
+            var arg = globals.ADDRESS[key];
+            var d = $q.defer();
+            var server_url = globals[server_url] || globals.ADMIN_SERVER;
+            console.log('server_url: ', server_url);
+            console.log('arg: ', arg);
+            $http({
+                method: "JSONP",
+                url: server_url,
+                params: {
+                    "url": arg,
+                    "callback": "JSON_CALLBACK",
+                    "uid": uid,
+                    "token": token
+                }
+            }).then(function success(res) {
+                if (res.data.result == 0) {
+                    console.log('FetchDataService.fetchData() sucess: ', res);
+                    d.resolve(warehouse.set(key, res.data.data));
+                } else {
+                    alert('L316:怪余祺');
+                    d.reject('怪余祺')
+                }
+            }, function failed(res) {
+                console.log('err: ', res);
+                d.reject(res);
+            });
+            return d.promise;
+        }
+    }
+}]);
+App.factory('authHttpResponseInterceptor', ['$q', '$location', '$injector', function ($q, $location, $injector) {
+    var header_left_buttons = {
+        "default": {
+            "text": "返回",
+            "ng-click": null,
+            "ng-href": null,
+            "show": true
+        },
+        "register": {
+            "text": "注册",
+            "ng-click": null,
+            "ng-href": "/register",
+            "show": true
+        }
+    };
+    var header_right_buttons = {
+        "login": {
+            "text": "登录",
+            "ng-click": null,
+            "ng-href": null,
+            "show": true
+        },
+        "chargeIn": {
+            "text": "充值",
+            "ng-click": null,
+            "ng-href": null,
+            "show": true
+        }
+    };
+    //return {
+    //    set_header_left_button: function (key) {
+    //        console.log("set_header_left_button:(", key, ")");
+    //        return header_left_buttons.key;
+    //    },
+    //    set_header_right_button: function (key) {
+    //        console.log("set_header_right_button:(", key, ")");
+    //        return header_right_buttons.key;
+    //    }
+    //}
+    return {
+        response: function (response) {
+            if (response.status === 401) {}
+            return response || $q.when(response);
+        },
+        responseError: function (rejection) {
+            var reservedPaths = ['/', '/mycube', '/connect', '/event'];
+            if (rejection.status === 401 && _.contains(reservedPaths, $location.path().trim())) {
+                var stateService = $injector.get('$state');
+                stateService.go('home');
+            }
+            return $q.reject(rejection);
+        }
+    };
+}]);
 //登陆服务
 App.factory('loginService', ['$http', '$cookies', '$location', 'globals', 'userInfo', function ($http, $cookies, $location, globals, userInfo) {
-    console.log(globals.ADMIN_SERVER);
-    console.log(globals.TEST_2_SERVER);
-
-    var uid = null;
-    var token = null;
     return {
         isLoggedIn: function () {
             return uid !== null && token !== null;
         },
-        fetchCaptcha: function (sucess, error) {
+        //必须调用专门的请求，因为验证码接口的返回没有result字段
+        fetchCaptcha: function () {
             var self = this;
             $http({
                 method: "JSONP",
@@ -268,6 +398,7 @@ App.factory('loginService', ['$http', '$cookies', '$location', 'globals', 'userI
             }).then(function (res) {
                 self.txtToCaptcha(res.data.checkCode);
                 self.setCookie(res.data.redisName);
+                return res.data.checkCode; //测试使用
             }, function (res) {
                 console.log('fetchCaptcha() ERR: ', res);
             });
@@ -300,6 +431,7 @@ App.factory('loginService', ['$http', '$cookies', '$location', 'globals', 'userI
             $("#check_img").prop("src", canvas.toDataURL("image/png"));
         },
         login: function (cred) {
+            console.log('cred: ', cred);
             //login: function (cred, sucess, error) {
             var shit = {
                 name: cred.username,
@@ -317,12 +449,9 @@ App.factory('loginService', ['$http', '$cookies', '$location', 'globals', 'userI
                     "callback": "JSON_CALLBACK"
                 }
             }).then(function success(res) {
-                //console.log("res: ", JSON.stringify(res));
                 if (res.data.result == 0) {
                     userInfo.setUserInfo(res.data.data);
-                    uid = res.data.data.userId;
-                    token = res.data.data.token;
-                    console.log('userInfo: ', userInfo.getUserInfo());
+                    globals.set_uid_token(res.data.data.userId, res.data.data.token);
                     $location.path('/personal_center').replace();
                 } else {
                     return console.error('怪余祺')
@@ -344,7 +473,7 @@ App.factory('loginService', ['$http', '$cookies', '$location', 'globals', 'userI
 }]);
 //项目服务
 //对相同的API的操作并到一个factory里，可以共用一个常量URL
-App.factory('factoryInvestList', ['$http', '$cacheFactory', 'globals', function ($http, $cacheFactory, globals) {
+App.factory('factoryInvestList', ['$http', '$cacheFactory', 'globals', 'FetchDataService', function ($http, $cacheFactory, globals, FetchDataService) {
     var lru = $cacheFactory('lru', {
         capacity: 5
     }); //缓存5次请求
@@ -376,47 +505,17 @@ App.factory('factoryInvestList', ['$http', '$cacheFactory', 'globals', function 
         }
     };
 }]);
-//个人中心
-App.factory('factoryPersonalCenter', ['$http', '$cacheFactory', '$rootScope', 'loginService', 'globals', function ($http, $cacheFactory, $rootScope, loginService, globals) {
-    var data = {};
-    return {
-        fetchData: function () {
-            var self = this;
-            var arg = globals.ADDRESS.GET_CUSTOMERACCOUNT;
-            return $http({
-                method: "JSONP",
-                url: globals.ADMIN_SERVER,
-                params: {
-                    "url": arg,
-                    "callback": "JSON_CALLBACK",
-                    "uid": loginService.get_uid_token().uid,
-                    "token": loginService.get_uid_token().token
-                }
-            }).then(function (res) {
-                if (res.data.result == 0) {
-                    console.log('factoryPersonalCenter.fetchData() sucess: ', res);
-                    self.setData(res.data.data);
-                    $rootScope.$broadcast('dataFetched');
-                    //return self.getData();
-                    return res.data.data;
-                } else {
-                    console.error('怪余祺');
-                    return {};
-                }
-            }, function (res) {
-                console.log('err: ', res);
-                return {};
-            });
-        },
-        getData: function () {
-            console.log('factoryPersonalCenter.getData(', data, ')');
-            return data;
-        },
-        setData: function (obj) {
-            console.log('factoryPersonalCenter.setData(', obj, ')');
-            return data = obj;
-        }
-    }
+App.factory('factoryPageHeader', ['$http', '$cacheFactory', '$rootScope', 'loginService', 'globals', function ($http, $cacheFactory, $rootScope, loginService, globals) {
+    return {};
+}]);
+//============================= Controllers ===========================================================
+//Body控制器
+App.controller('body_controller', ['$scope', '$route', function ($scope, $route) {
+    var nav_bar_bottom_show_list = ['/', '/invest', '/personal_center', '/more'];
+    $scope.$on('$routeChangeSuccess', function () {
+        //console.log(_.contains(nav_bar_bottom_show_list, $route.current.originalPath));
+        $scope.should_appear = _.contains(nav_bar_bottom_show_list, $route.current.originalPath.trim());
+    });
 }]);
 //页面标题栏
 App.controller('header_controller', ['$scope', '$route', function ($scope, $route) {
@@ -439,7 +538,7 @@ App.controller('login_controller', ['$scope', 'loginService', function ($scope, 
     $scope.fetchCaptcha = function () {
         loginService.fetchCaptcha();
     };
-    $scope.fetchCaptcha();
+    $scope.fetchCaptcha(); //点击验证码需要
     $scope.login = function () {
         var cred = {
             username: $scope.username,
@@ -450,12 +549,12 @@ App.controller('login_controller', ['$scope', 'loginService', function ($scope, 
     }
 }]);
 //更多
-App.controller('more_controller', ['$scope', 'factoryMore', function ($scope, factoryMore) {}]);
+App.controller('more_controller', ['$scope', 'factoryMore', function ($scope, factoryMore) {
+}]);
 //投资列表
 App.controller('invest_controller', ['$scope', 'factoryInvestList', function ($scope, factoryInvestList) {
     $scope.billTypeList = ['待购买', '银票纯', '银票红', '银商', '转让', '第三方平台'];
     factoryInvestList.getList(function (res) {
-        console.log('sucess: ', res.data.data);
         $scope.itemList = res.data.data;
     }, function (res) {
         console.log('err: ', res);
@@ -465,21 +564,25 @@ App.controller('invest_controller', ['$scope', 'factoryInvestList', function ($s
 App.controller('invest_item_detail_controller', ['$scope', '$route', '$routeParams', 'factoryInvestList', function ($scope, $route, $routeParams, factoryInvestList) {
     var billId = $routeParams.id.replace(':', '');
     factoryInvestList.getDetail(billId, function (res) {
-        console.log('sucess & data: ', res.data.data);
         $scope.item = res.data.data;
     }, function (res) {
         console.log('err: ', res);
     });
 }]);
 //个人中心
-App.controller('personal_center_controller', ['$scope', 'userInfo', 'factoryPersonalCenter', function ($scope, userInfo, factoryPersonalCenter) {
+App.controller('personal_center_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
+    $scope.onOff = ['关闭', '开启'];
+    $scope.data = {};
+    FetchDataService.fetchData('GET_CUSTOMERACCOUNT').then(function (res) {
+        console.log('res: ', res);
+        $scope.data = res;
+    });
+}]);
+App.controller('personal_center_my_investments_controller', ['$scope', 'userInfo', 'factoryPersonalCenter', function ($scope, userInfo, factoryPersonalCenter) {
     $scope.onOff = ['关闭', '开启'];
     $scope.$on('dataFetched', function () {
-        //console.log('get brocatst: dataFetched');
         $scope.data = factoryPersonalCenter.getData();
         $scope.data.isOpen = userInfo.getUserInfo().isOpen;
     });
     factoryPersonalCenter.fetchData();
 }]);
-//首页
-App.controller('index_page_controller', ['$scope', '$http', '$location', '$route', '$routeParams', function ($scope, $http, $location, $route, $routeParams) {}]);

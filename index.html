@@ -37,10 +37,10 @@
     <title>银票网</title>
 </head>
 
-<body ng-controller="index_page_controller">
+<body ng-controller="body_controller">
 <div class="ng-include-header" ng-include="'partials/header.html'"></div>
 <div class="ng-view-container md-container" ng-view></div>
-<div class="ng-include-menu md-container" ng-include="'partials/menu.html'"></div>
+<div class="ng-include-menu md-container" ng-include="'partials/menu.html'" ng-show="should_appear"></div>
 <script src="js/app.js"></script>
 <!--<script src="js/services.js"></script>-->
 <!--<script src="js/controllers.js"></script>-->
