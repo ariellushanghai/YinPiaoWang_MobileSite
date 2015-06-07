@@ -6,11 +6,15 @@ App.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
     $routeProvider.when('/', {
         templateUrl: 'partials/main.html',
         controller: 'main_controller',
-        page_title: '银票网'
+        page_title: '银票网',
+        header_left_button: 'register',
+        header_right_button: 'login'
     }).when('/invest', {
         templateUrl: 'partials/invest.html',
         controller: 'invest_controller',
-        page_title: '投资列表'
+        page_title: '投资列表',
+        header_left_button: 'blank',
+        header_right_button: 'default'
     }).when('/invest/:id', {
         templateUrl: 'partials/invest_item_detail.html',
         controller: 'invest_item_detail_controller',
@@ -18,11 +22,15 @@ App.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
     }).when('/login', {
         templateUrl: 'partials/login.html',
         controller: 'login_controller',
-        page_title: '登录'
+        page_title: '登录',
+        header_left_button: 'blank',
+        header_right_button: 'default'
     }).when('/personal_center', {
         templateUrl: 'partials/personal_center.html',
         controller: 'personal_center_controller',
-        page_title: '个人中心'
+        page_title: '个人中心',
+        header_left_button: 'blank',
+        header_right_button: 'chargeIn'
     }).when('/personal_center/my_investments/:id', {
         templateUrl: 'partials/my_investments.html',
         controller: 'personal_center_my_investments_controller',
@@ -30,7 +38,9 @@ App.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
     }).when('/more', {
         templateUrl: 'partials/more.html',
         controller: 'more_controller',
-        page_title: '更多'
+        page_title: '更多',
+        header_left_button: 'blank',
+        header_right_button: 'default'
     }).otherwise({
         redirectTo: '/'
     });
@@ -46,6 +56,7 @@ App.run(['$rootScope', '$location', '$cookies', 'authHttpResponseInterceptor', f
     });
 }]);
 //=======================   服务  =======================
+//全局变量定义
 App.factory('globals', [function () {
     var ADMIN_SERVER = 'http://192.168.1.70/mobile/jsonp';
     var TEST_2_SERVER = 'http://192.168.1.70:8080/jsonp';
@@ -316,12 +327,12 @@ App.factory('FetchDataService', ['$http', '$cookies', '$location', '$q', 'global
                 if (res.data.result == 0) {
                     console.log('FetchDataService.fetchData() sucess: ', res);
                     d.resolve(warehouse.set(key, res.data.data));
-                } else if(res.data.result == 1) {
+                } else if (res.data.result == 1) {
                     //数据不可用
                     d.reject('吊打余棋')
-                } else if(res.data.result == 2) {
+                } else if (res.data.result == 2) {
                     //认证失败
-                    globals.set_uid_token(null,null);
+                    globals.set_uid_token(null, null);
                     $location.path('/login').replace();
                 } else {
                     alert('吊打余棋');
@@ -335,58 +346,62 @@ App.factory('FetchDataService', ['$http', '$cookies', '$location', '$q', 'global
         }
     }
 }]);
-App.factory('authHttpResponseInterceptor', ['$q', '$location', '$injector', function ($q, $location, $injector) {
+App.factory('authHttpResponseInterceptor', [function () {
     var header_left_buttons = {
         "default": {
             "text": "返回",
-            "ng-click": null,
-            "ng-href": null,
+            "ngClick": "",
+            "ngHref": "",
             "show": true
         },
         "register": {
             "text": "注册",
-            "ng-click": null,
-            "ng-href": "/register",
+            "ngClick": "",
+            "ngHref": "/register",
             "show": true
+        },
+        "blank": {
+            "text": "",
+            "ngClick": "",
+            "ngHref": "",
+            "show": false
         }
     };
     var header_right_buttons = {
+        "default": {
+            "text": "",
+            "ngClick": "",
+            "ngHref": "",
+            "show": false
+        },
         "login": {
             "text": "登录",
-            "ng-click": null,
-            "ng-href": null,
+            "ngClick": "",
+            "ngHref": "/login",
             "show": true
         },
         "chargeIn": {
             "text": "充值",
-            "ng-click": null,
-            "ng-href": null,
+            "ngClick": "",
+            "ngHref": "",
             "show": true
         }
     };
-    //return {
-    //    set_header_left_button: function (key) {
-    //        console.log("set_header_left_button:(", key, ")");
-    //        return header_left_buttons.key;
-    //    },
-    //    set_header_right_button: function (key) {
-    //        console.log("set_header_right_button:(", key, ")");
-    //        return header_right_buttons.key;
-    //    }
-    //}
     return {
-        response: function (response) {
-            if (response.status === 401) {}
-            return response || $q.when(response);
-        },
-        responseError: function (rejection) {
-            var reservedPaths = ['/', '/mycube', '/connect', '/event'];
-            if (rejection.status === 401 && _.contains(reservedPaths, $location.path().trim())) {
-                var stateService = $injector.get('$state');
-                stateService.go('home');
-            }
-            return $q.reject(rejection);
-        }
+        "header_left_buttons": header_left_buttons,
+        "header_right_buttons": header_right_buttons
+        //response: function (response) {
+        //    if (response.status === 401) {}
+        //    return response || $q.when(response);
+        //},
+        //responseError: function (rejection) {
+        //    var reservedPaths = ['/', '/mycube', '/connect', '/event'];
+        //    if (rejection.status === 401 && _.contains(reservedPaths, $location.path().trim())) {
+        //        var stateService = $injector.get('$state');
+        //        stateService.go('home');
+        //    }
+        //    return $q.reject(rejection);
+        //}
     };
 }]);
 //登陆服务
@@ -515,9 +530,18 @@ App.factory('factoryInvestList', ['$http', '$cacheFactory', 'globals', 'FetchDat
         }
     };
 }]);
-App.factory('factoryPageHeader', ['$http', '$cacheFactory', '$rootScope', 'loginService', 'globals', function ($http, $cacheFactory, $rootScope, loginService, globals) {
-    return {};
-}]);
+//============================= Directives ===========================================================
+App.directive('pageHeader', function () {
+    return {
+        restrict: 'A',
+        replace: true,
+        template: '<header>' +
+        '<a id="btn_header_register" class="left-button" ng-href="{{l_btn.ngHref}}">{{l_btn.text}}</a>' +
+        '<h1 class="title">{{getPageTitle()}}</h1>' +
+        '<a id="btn_header_login" class="right-button" ng-href="{{r_btn.ngHref}}">{{r_btn.text}}</a>' +
+        '</header>'
+    };
+});
 //============================= Controllers ===========================================================
 //Body控制器
 App.controller('body_controller', ['$scope', '$route', function ($scope, $route) {
@@ -528,10 +552,21 @@ App.controller('body_controller', ['$scope', '$route', function ($scope, $route)
     });
 }]);
 //页面标题栏
-App.controller('header_controller', ['$scope', '$route', function ($scope, $route) {
+App.controller('header_controller', ['$scope', '$route', 'authHttpResponseInterceptor', function ($scope, $route, authHttpResponseInterceptor) {
+    $scope.l_btn = null;
+    $scope.r_btn = null;
     $scope.getPageTitle = function () {
         return $route.current.page_title;
-    }
+    };
+    $scope.$on('$routeChangeSuccess', function () {
+        console.log($route.current.originalPath.trim());
+        var l_btn = $route.current.header_left_button || 'default';
+        var r_btn = $route.current.header_right_button || 'default';
+        console.log('左按钮：', authHttpResponseInterceptor.header_left_buttons[l_btn]);
+        console.log('右按钮：', authHttpResponseInterceptor.header_right_buttons[r_btn]);
+        $scope.l_btn = authHttpResponseInterceptor.header_left_buttons[l_btn];
+        $scope.r_btn = authHttpResponseInterceptor.header_right_buttons[r_btn];
+    });
 }]);
 //底部导航条
 App.controller('menu_controller', ['$scope', '$location', function ($scope, $location) {
@@ -559,8 +594,7 @@ App.controller('login_controller', ['$scope', 'loginService', function ($scope, 
     }
 }]);
 //更多
-App.controller('more_controller', ['$scope', 'factoryMore', function ($scope, factoryMore) {
-}]);
+App.controller('more_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {}]);
 //投资列表
 App.controller('invest_controller', ['$scope', 'factoryInvestList', function ($scope, factoryInvestList) {
     $scope.billTypeList = ['待购买', '银票纯', '银票红', '银商', '转让', '第三方平台'];
