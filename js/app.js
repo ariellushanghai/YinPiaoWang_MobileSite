@@ -19,6 +19,12 @@ App.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
         templateUrl: 'partials/invest_item_detail.html',
         controller: 'invest_item_detail_controller',
         page_title: '项目详情'
+    }).when('/register', {
+        templateUrl: 'partials/register.html',
+        controller: 'login_controller',
+        page_title: '注册',
+        header_left_button: 'blank',
+        header_right_button: 'default'
     }).when('/login', {
         templateUrl: 'partials/login.html',
         controller: 'login_controller',
@@ -30,11 +36,17 @@ App.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
         controller: 'personal_center_controller',
         page_title: '个人中心',
         header_left_button: 'blank',
-        header_right_button: 'chargeIn'
+        header_right_button: 'goPayIndex'
     }).when('/personal_center/my_investments/:id', {
         templateUrl: 'partials/my_investments.html',
         controller: 'personal_center_my_investments_controller',
         page_title: '我的投资'
+    }).when('/personal_center/goPayIndex', {
+        templateUrl: 'partials/goPayIndex.html',
+        controller: 'personal_center_goPayIndex_controller',
+        page_title: '充 值',
+        header_left_button: 'default',
+        header_right_button: 'default'
     }).when('/more', {
         templateUrl: 'partials/more.html',
         controller: 'more_controller',
@@ -380,10 +392,10 @@ App.factory('authHttpResponseInterceptor', [function () {
             "ngHref": "/login",
             "show": true
         },
-        "chargeIn": {
+        "goPayIndex": {
             "text": "充值",
             "ngClick": "",
-            "ngHref": "",
+            "ngHref": "/personal_center/goPayIndex",
             "show": true
         }
     };
@@ -536,9 +548,9 @@ App.directive('pageHeader', function () {
         restrict: 'A',
         replace: true,
         template: '<header>' +
-        '<a id="btn_header_register" class="left-button" ng-href="{{l_btn.ngHref}}">{{l_btn.text}}</a>' +
-        '<h1 class="title">{{getPageTitle()}}</h1>' +
-        '<a id="btn_header_login" class="right-button" ng-href="{{r_btn.ngHref}}">{{r_btn.text}}</a>' +
+        '<a id="btn_header_register" class="left-button" ng-href="{{l_btn.ngHref}}" ng-click="$scope.fire(\'header_l_clicked\', l_btn.ngClick)">{{l_btn.text}}</a>' +
+        '<h1 class="title">{{getPageTitle}}</h1>' +
+        '<a id="btn_header_login" class="right-button" ng-href="{{r_btn.ngHref}}" ng-click="$scope.fire(\'header_r_clicked\', r_btn.ngClick)">{{r_btn.text}}</a>' +
         '</header>'
     };
 });
@@ -547,26 +559,36 @@ App.directive('pageHeader', function () {
 App.controller('body_controller', ['$scope', '$route', function ($scope, $route) {
     var nav_bar_bottom_show_list = ['/', '/invest', '/personal_center', '/more'];
     $scope.$on('$routeChangeSuccess', function () {
-        //console.log(_.contains(nav_bar_bottom_show_list, $route.current.originalPath));
+        //console.log($route);
+        //console.log($route.current);
+        //console.log($route.current.originalPath);
         $scope.should_appear = _.contains(nav_bar_bottom_show_list, $route.current.originalPath.trim());
     });
+    $scope.$on('header_l_clicked', function (evt) {
+        console.log('header_l_clicked: ',evt);
+    });
+
 }]);
 //页面标题栏
 App.controller('header_controller', ['$scope', '$route', 'authHttpResponseInterceptor', function ($scope, $route, authHttpResponseInterceptor) {
     $scope.l_btn = null;
     $scope.r_btn = null;
-    $scope.getPageTitle = function () {
-        return $route.current.page_title;
-    };
+    $scope.getPageTitle = null;
+
     $scope.$on('$routeChangeSuccess', function () {
-        console.log($route.current.originalPath.trim());
+        //console.log($route.current.originalPath.trim());
         var l_btn = $route.current.header_left_button || 'default';
         var r_btn = $route.current.header_right_button || 'default';
         console.log('左按钮：', authHttpResponseInterceptor.header_left_buttons[l_btn]);
         console.log('右按钮：', authHttpResponseInterceptor.header_right_buttons[r_btn]);
         $scope.l_btn = authHttpResponseInterceptor.header_left_buttons[l_btn];
         $scope.r_btn = authHttpResponseInterceptor.header_right_buttons[r_btn];
+        $scope.getPageTitle = $route.current.page_title;
     });
+    $scope.fire = function(txt, ng_click_evt) {
+        console.log('txt: ', txt , 'ng_click_evt: ', ng_click_evt);
+        $scope.$emit(txt, ng_click_evt);
+    };
 }]);
 //底部导航条
 App.controller('menu_controller', ['$scope', '$location', function ($scope, $location) {
@@ -578,6 +600,23 @@ App.controller('menu_controller', ['$scope', '$location', function ($scope, $loc
 App.controller('main_controller', ['$scope', function ($scope) {}]);
 //登陆
 App.controller('login_controller', ['$scope', 'loginService', function ($scope, loginService) {
+    $scope.username = '13812345678';
+    $scope.password = '111111';
+    $scope.fetchCaptcha = function () {
+        loginService.fetchCaptcha();
+    };
+    $scope.fetchCaptcha(); //点击验证码需要
+    $scope.login = function () {
+        var cred = {
+            username: $scope.username,
+            password: $scope.password,
+            checkCode: $scope.checkCode
+        };
+        loginService.login(cred);
+    }
+}]);
+//注册
+App.controller('register', ['$scope', 'loginService', function ($scope, loginService) {
     $scope.username = '13812345678';
     $scope.password = '111111';
     $scope.fetchCaptcha = function () {
@@ -622,11 +661,11 @@ App.controller('personal_center_controller', ['$scope', 'userInfo', 'FetchDataSe
         $scope.data = res;
     });
 }]);
-App.controller('personal_center_my_investments_controller', ['$scope', 'userInfo', 'factoryPersonalCenter', function ($scope, userInfo, factoryPersonalCenter) {
-    $scope.onOff = ['关闭', '开启'];
-    $scope.$on('dataFetched', function () {
-        $scope.data = factoryPersonalCenter.getData();
-        $scope.data.isOpen = userInfo.getUserInfo().isOpen;
+
+App.controller('personal_center_goPayIndex_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
+    $scope.data = {};
+    FetchDataService.fetchData('GET_CUSTOMERACCOUNT').then(function (res) {
+        console.log('res: ', res);
+        $scope.data = res;
     });
-    factoryPersonalCenter.fetchData();
 }]);

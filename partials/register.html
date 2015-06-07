@@ -1,0 +1,26 @@
+<section class="login">
+    <!-- logo -->
+    <div class="login_logo"><img src="asserts/icons/loging_logo.png" alt="" /></div>
+    <!-- 登录表单 -->
+    <section class="login_con">
+        <p>
+            <!--<input type="text" placeholder="15221010896" ng-model="username" />-->
+            <input type="text" placeholder="13812345678" ng-model="username" />
+        </p>
+        <p>
+            <input type="password" placeholder="111111" ng-model="password" />
+        </p>
+        <p class="login_position">
+            <input type="text" placeholder="验证码" ng-model="checkCode"/>
+            <img src="" id="check_img" ng-click="fetchCaptcha()"/>
+        </p>
+        <p>
+            <input type="button" value="登&nbsp;&nbsp;&nbsp;&nbsp;录" class="login_btn" ng-disabled="!username" ng-click="login()"/>
+        </p>
+        <p class="fgpwd">
+            <a href="#">忘记密码？</a>
+            <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+            <a href="#">注册新用户</a>
+        </p>
+    </section>
+</section>

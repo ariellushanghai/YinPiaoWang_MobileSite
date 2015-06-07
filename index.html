@@ -38,9 +38,13 @@
 </head>
 
 <body ng-controller="body_controller">
-<div class="ng-include-header" ng-include="'partials/header.html'"></div>
-<div class="ng-view-container md-container" ng-view></div>
-<div class="ng-include-menu md-container" ng-include="'partials/menu.html'" ng-show="should_appear"></div>
+<!--<div class="ng-include-header" ng-include="'partials/header.html'">-->
+<div class="ng-include-header">
+    <header page-header ng-controller="header_controller" class="header-wrapper" id="heading_bar" ng-cloak>
+    </header>
+</div>
+<div class="ng-view-container" ng-view></div>
+<div class="ng-include-menu" ng-include="'partials/menu.html'" ng-show="should_appear"></div>
 <script src="js/app.js"></script>
 <!--<script src="js/services.js"></script>-->
 <!--<script src="js/controllers.js"></script>-->
