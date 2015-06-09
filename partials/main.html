@@ -1,1 +1,59 @@
-<h1 class="title" data-page-title="首 页"></h1>
+<!-- 图片轮播 -->
+<section class="img_tab" img_tab id="img_tab" ng-swipe-left="swipe_left_index()" ng-swipe-right="swipe_right_index()">
+    <ul>
+        <li ng-repeat="img in imgtabs"><a ng-href="{{img.url}}"><img ng-src="{{img.path}}" alt=""/></a></li>
+    </ul>
+</section>
+<!-- 图片轮播END -->
+
+<!-- 公司介绍 -->
+<gognsijieshao></gognsijieshao>
+<!-- 公司介绍END-->
+
+<!-- 最新资讯 -->
+<section class="zxzx">
+    <a href="#" class="more"></a>
+    <b>最新资讯：</b>
+    <span>银票网正式加入上海互联网行业和信息服务行业协会</span>
+</section>
+<!-- 最新资讯 END -->
+
+<!-- 投资列表 -->
+<section>
+    <h3 class="title_h3">投资列表</h3>
+
+    <div class="nav_list">
+        <ul>
+            <li><a href="#" class="current">全部</a></li>
+            <li><a href="#">银票理财</a></li>
+            <li><a href="#">银商理财</a></li>
+            <li><a href="#">转让项目</a></li>
+            <li><a href="#">第三方平台</a></li>
+        </ul>
+        <div class="cl"></div>
+    </div>
+    <ul class="xm_list" ng-show="itemList">
+        <li ng-repeat="item in itemList">
+            <a ng-href="/invest/:{{item.id}}" class="content">
+                <div class="Percentage wid25">
+                    <div class="process-con"></div>
+                    <div class="process-num">{{item.progress + '%'}}</div>
+                </div>
+                <div class="wid75">
+                    <h3><span class="zhr">{{billTypeList[item.billType]}}</span>{{item.billName}}</h3>
+                    <ul class="zxxm_ul">
+                        <li><span class="nub_red">{{item.billApr}}</span> %
+                            <br />年化收益率</li>
+                        <li><span class="nub_red nub_glay">{{item.billDay}}</span> 天
+                            <br />项目期限</li>
+                        <li><span class="nub_red nub_glay">{{item.billMoney | number}}</span> 万
+                            <br />融资金额</li>
+                    </ul>
+                </div>
+                <div class="cl"></div>
+            </a>
+        </li>
+    </ul>
+
+</section>
+<!-- 投资列表 END -->

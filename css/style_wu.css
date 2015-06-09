@@ -633,12 +633,12 @@ footer a span{
 .nav_list ul li:last-of-type{
     width: 25%;
 }
-.nav_list ul li a{
+.nav_list ul li span {
     width: 100%;
     display: inline-block;
 
 }
-.nav_list ul li a.current{
+.nav_list ul li.current span {
     color: #ffffff;
     background-color: #e65e5e;
     border-radius: 3px;
