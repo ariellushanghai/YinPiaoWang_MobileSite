@@ -10,7 +10,7 @@ App_controllers.controller('body_controller', ['$scope', '$route', function ($sc
         //console.log($route);
         //console.log($route.current);
         //console.log($route.current.originalPath);
-        $scope.should_App_controllersear = _.contains(nav_bar_bottom_show_list, $route.current.originalPath.trim());
+        $scope.should_appear = _.contains(nav_bar_bottom_show_list, $route.current.originalPath.trim());
     });
     $scope.$on('header_l_clicked', function (evt) {
         console.log('header_l_clicked: ', evt);

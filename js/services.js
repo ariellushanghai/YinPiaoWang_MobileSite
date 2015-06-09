@@ -284,7 +284,7 @@ App_services.factory('FetchDataService', ['$http', '$cookies', '$location', '$q'
                     globals.set_uid_token(null, null);
                     $location.path('/login').replace();
                 } else {
-                    alert('不明原因 吊打余棋');
+                    console.log('不明原因 吊打余棋');
                     d.reject('吊打余棋')
                 }
             }, function failed(res) {
