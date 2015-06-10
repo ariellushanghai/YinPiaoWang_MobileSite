@@ -1,21 +1,59 @@
 <!-- 图片轮播 -->
-<section class="img_tab" img_tab id="img_tab" ng-swipe-left="swipe_left_index()" ng-swipe-right="swipe_right_index()">
-    <ul>
-        <li ng-repeat="img in imgtabs"><a ng-href="{{img.url}}"><img ng-src="{{img.path}}" alt=""/></a></li>
+
+<section class="homepage-carousel">
+    <ul rn-carousel rn-carousel-auto-slide rn-carousel-pause-on-hover rn-carousel-buffered rn-carousel-transition="hexagon" rn-carousel-index="carouselIndex" class="homepage-carousel-ul">
+        <li ng-repeat="slide in slides">
+            <div ng-style="{'background-image': 'url(' + slide.slide_src + ')'}"  class="homepage-carousel-slide-container">
+            </div>
+        </li>
     </ul>
+    <div rn-carousel-indicators ng-if="slides.length > 1" slides="slides" class="homepage-carousel-indicators rn-carousel-indicator custom-indicator" >
+        <span ng-repeat="slide in slides2" ng-class="{active: $index==carouselIndex}">●</span>
+    </div>
 </section>
 <!-- 图片轮播END -->
 
 <!-- 公司介绍 -->
-<gognsijieshao></gognsijieshao>
+<section>
+    <h3 class="title_h3">公司介绍</h3>
+    <div class="gsjs" id="gsjs">
+        <ul class="js_ul" id="js_ul">
+            <li>
+                <i class="icon_js1"></i>
+                <br />
+                <span>第三方支付保驾护<br />航，资金更安全</span>
+            </li>
+            <li>
+                <i class="icon_js2"></i>
+                <br />
+                <span>银票均有托收凭证<br />银行提供担保</span>
+            </li>
+            <li>
+                <i class="icon_js3"></i>
+                <br />
+                <span>票据均有第三方<br />担保方担保</span>
+            </li>
+            <li>
+                <i class="icon_js4"></i>
+                <br />
+                <span>战略合作伙伴<br />提供本息担保</span>
+            </li>
+            <li>
+                <i class="icon_js5"></i>
+                <br />
+                <span>优秀风控团队<br />用专业铸就信赖</span>
+            </li>
+        </ul>
+    </div>
+</section>
 <!-- 公司介绍END-->
 
 <!-- 最新资讯 -->
-<section class="zxzx">
-    <a href="#" class="more"></a>
-    <b>最新资讯：</b>
-    <span>银票网正式加入上海互联网行业和信息服务行业协会</span>
-</section>
+<!--<section class="zxzx">-->
+    <!--<a href="#" class="more"></a>-->
+    <!--<b>最新资讯：</b>-->
+    <!--<span>银票网正式加入上海互联网行业和信息服务行业协会</span>-->
+<!--</section>-->
 <!-- 最新资讯 END -->
 
 <!-- 投资列表 -->
@@ -24,20 +62,20 @@
 
     <div class="nav_list">
         <ul>
-            <li><a href="#" class="current">全部</a></li>
-            <li><a href="#">银票理财</a></li>
-            <li><a href="#">银商理财</a></li>
-            <li><a href="#">转让项目</a></li>
-            <li><a href="#">第三方平台</a></li>
+            <li><span ng-click="console.log(page.type = '')"class="current">全部</span></li>
+            <li><span ng-click="page.type = 0">银票理财</span></li>
+            <li><span ng-click="page.type = 1">银商理财</span></li>
+            <li><span ng-click="page.type = 4">转让项目</span></li>
+            <li><span ng-click="page.type = 5">第三方平台</span></li>
         </ul>
         <div class="cl"></div>
     </div>
     <ul class="xm_list" ng-show="itemList">
         <li ng-repeat="item in itemList">
-            <a ng-href="/invest/:{{item.id}}" class="content">
+            <a ng-href="/invest/:{{item.billId}}" class="content">
                 <div class="Percentage wid25">
                     <div class="process-con"></div>
-                    <div class="process-num">{{item.progress + '%'}}</div>
+                    <div class="process-num">{{item.billPogress + '%'}}</div>
                 </div>
                 <div class="wid75">
                     <h3><span class="zhr">{{billTypeList[item.billType]}}</span>{{item.billName}}</h3>
@@ -56,4 +94,4 @@
     </ul>
 
 </section>
-<!-- 投资列表 END -->
+<!-- 投资列表 END

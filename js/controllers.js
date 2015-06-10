@@ -46,35 +46,45 @@ App_controllers.controller('menu_controller', ['$scope', '$location', function (
     };
 }]);
 //首页
-App_controllers.controller('main_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
+App_controllers.controller('main_controller', ['$scope', 'userInfo', 'FetchDataService', 'globals', function ($scope, userInfo, FetchDataService, globals) {
     $scope.onOff = ['关闭', '开启'];
     $scope.billTypeList = ['待购买', '银票纯', '银票红', '银商', '转让', '第三方平台'];
-    // 获取指定文本信息
-    //ADDRESS.GRT_IMAGE = encodeURIComponent("cms/folder/image");
-    // 获取指定文本信息
-    //ADDRESS.GRT_CONTENT = encodeURIComponent("cms/folder/content");
-    // 获取指定附件信息p
-    //ADDRESS.GRT_DOCUMENT = encodeURIComponent("cms/folder/document");
 
+    var dir = globals.ADDRESS;
     var slide_arg = {
-        //path : "/首页/滚动消息",
-        path : "/homePage/rollingMessage",
+        path: "/home/banner",
         page: 1,
-        num: 5
+        num: 10
     };
     var billList = {
         num: 10,
         page: 1,
         status: 0
     };
-    FetchDataService.fetchData('GRT_IMAGE', 'TEST_2_SERVER', slide_arg).then(function (res) {
-        console.log('GRT_IMAGE res: ', res);
+    // 首页幻灯片
+    FetchDataService.fetchArray('GRT_IMAGE', 'TEST_2_SERVER', slide_arg).then(function (res) {
+        //console.log('GRT_IMAGE res: ', res);
+        angular.forEach(res, function (elm, index) {
+            //console.log(dir['GRT_BANNER_IMAGES'] + elm.id);
+            elm.slide_src = dir['GRT_BANNER_IMAGES'] + elm.id;
+        });
         $scope.slides = res;
     });
     // 最新投资项目
     FetchDataService.fetchData('FINDBILLLIST_MAIN', 'TEST_2_SERVER', billList).then(function (res) {
         //console.log('FINDBILLLIST_MAIN res: ', res);
         $scope.latestItems = res;
+    });
+
+    $scope.page = {
+        "type": 0,
+        "page": 1,
+        "num": 10
+    };
+
+    FetchDataService.fetchData('List', 'ADMIN_SERVER', $scope.page).then(function (res) {
+        console.log('首页 res: ', res);
+        $scope.itemList = res;
     });
 }]);
 //登陆
@@ -123,7 +133,7 @@ App_controllers.controller('invest_controller', ['$scope', 'FetchDataService', f
     };
     $scope.$watch(function (scope) {
         return scope.page;
-    }, function() {
+    }, function () {
         console.log('hey, page has changed!');
     });
     FetchDataService.fetchData('List', 'ADMIN_SERVER', $scope.page).then(function (res) {
@@ -158,5 +168,4 @@ App_controllers.controller('personal_center_goPayIndex_controller', ['$scope', '
         $scope.data = res;
     });
 }]);
-App_controllers.controller('fourZeroFour_controller', [function () {
-}]);
+App_controllers.controller('fourZeroFour_controller', [function () {}]);

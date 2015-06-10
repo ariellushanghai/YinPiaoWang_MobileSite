@@ -73,6 +73,8 @@ App_services.factory('globals', [function () {
     ADDRESS.SMS_REG_PIC = encodeURIComponent("verification/checkImage");
     // 获取指定文本信息
     ADDRESS.GRT_IMAGE = encodeURIComponent("cms/folder/image");
+    // 首页幻灯片实际路径
+    ADDRESS.GRT_BANNER_IMAGES = "http://192.168.1.70:8080/cms/image/getImage/";
     // 获取指定文本信息
     ADDRESS.GRT_CONTENT = encodeURIComponent("cms/folder/content");
     // 获取指定附件信息
@@ -246,7 +248,7 @@ App_services.factory('FetchDataService', ['$http', '$cookies', '$location', '$q'
     var warehouse = Warehouse;
     return {
         fetchData: function (key, server_url, list_args) {
-            console.log('FetchDataService.fetchData(key: ', key, 'server_url: ', server_url, ')');
+            //console.log('FetchDataService.fetchData(key: ', key, 'server_url: ', server_url, ')');
             var uid = globals.get_uid_token().uid || '';
             var token = globals.get_uid_token().token || '';
             var arg = globals.ADDRESS[key];
@@ -274,32 +276,68 @@ App_services.factory('FetchDataService', ['$http', '$cookies', '$location', '$q'
                 }
             }).then(function success(res) {
                 if (res.data.result == 0) {
-                    console.log('FetchDataService.fetchData() sucess: ', res);
+                    console.log('fetchData() sucess: ', res);
                     d.resolve(warehouse.set(key, res.data.data));
                 } else if (res.data.result == 1) {
                     //数据不可用
-                    d.reject('吊打余棋 result==1')
+                    console.log('吊打余棋 result==1');
+                    d.reject({});
                 } else if (res.data.result == 2) {
                     //认证失败
                     globals.set_uid_token(null, null);
                     $location.path('/login').replace();
                 } else {
                     console.log('不明原因 吊打余棋');
-                    d.reject('吊打余棋')
+                    d.reject({});
                 }
             }, function failed(res) {
                 console.log('err: ', res);
-                d.reject(res);
+                d.reject({});
+            });
+            return d.promise;
+        },
+        //后台花样作死，发明的新返回格式: Array
+        fetchArray: function (key, server_url, list_args) {
+            //console.log('FetchDataService.fetchArray(key: ', key, 'server_url: ', server_url, ')');
+            var uid = globals.get_uid_token().uid || '';
+            var token = globals.get_uid_token().token || '';
+            var arg = globals.ADDRESS[key];
+            var server_url = globals[server_url] || globals.TEST_2_SERVER;
+            if (!angular.isUndefined(list_args)) {
+                var arg_str = '?';
+                for (var property in list_args) {
+                    if (list_args.hasOwnProperty(property)) {
+                        arg_str += (property + '=' + list_args[property] + '&');
+                    }
+                }
+                arg_str = arg_str.substr(0, arg_str.length - 1);
+                //console.log('arg_str: ', arg_str);
+                arg += encodeURIComponent(arg_str);
+            }
+            var d = $q.defer();
+            $http({
+                method: "JSONP",
+                url: server_url,
+                params: {
+                    "callback": "JSON_CALLBACK",
+                    "url": arg,
+                    "uid": uid,
+                    "token": token
+                }
+            }).then(function success(res) {
+                if(angular.isArray(res.data) || res.data.length > 0) {
+                    console.log('fetchArray() sucess: ', res);
+                    d.resolve(warehouse.set(key, res.data));
+                } else {
+                    console.log(res.data, '不明原因 吊打余棋');
+                    d.reject([]);
+                }
+            }, function failed(res) {
+                console.log('err: ', res);
+                d.reject([]);
             });
             return d.promise;
         }
-        //fetchList: function () {
-        //    var self = this;
-        //    self.fetchData('GRT_IMAGE', 'TEST_2_SERVER').then(function (res) {
-        //        console.log('GRT_IMAGE res: ', res);
-        //        $scope.slides = res.data.data;
-        //    });
-        //}
     }
 }]);
 App_services.factory('authHttpResponseInterceptor', [function () {
@@ -307,7 +345,7 @@ App_services.factory('authHttpResponseInterceptor', [function () {
         "default": {
             "text": "返回",
             "ngClick": "$window.history.back()",
-            "ngHref": "",
+            "ngHref": "#",
             "show": true
         },
         "register": {
@@ -319,7 +357,7 @@ App_services.factory('authHttpResponseInterceptor', [function () {
         "blank": {
             "text": "",
             "ngClick": "",
-            "ngHref": "",
+            "ngHref": "#",
             "show": false
         }
     };
@@ -327,7 +365,7 @@ App_services.factory('authHttpResponseInterceptor', [function () {
         "default": {
             "text": "",
             "ngClick": "",
-            "ngHref": "",
+            "ngHref": "#",
             "show": false
         },
         "login": {
