@@ -344,8 +344,9 @@ App_services.factory('authHttpResponseInterceptor', [function () {
     var header_left_buttons = {
         "default": {
             "text": "返回",
-            "ngClick": "$window.history.back()",
-            "ngHref": "#",
+            //$window.history.back()
+            "ngClick": "history_back",
+            "ngHref": "",
             "show": true
         },
         "register": {
@@ -357,7 +358,7 @@ App_services.factory('authHttpResponseInterceptor', [function () {
         "blank": {
             "text": "",
             "ngClick": "",
-            "ngHref": "#",
+            "ngHref": "",
             "show": false
         }
     };
@@ -365,7 +366,7 @@ App_services.factory('authHttpResponseInterceptor', [function () {
         "default": {
             "text": "",
             "ngClick": "",
-            "ngHref": "#",
+            "ngHref": "",
             "show": false
         },
         "login": {

@@ -4,17 +4,47 @@
 var App_controllers = angular.module('App_controllers', ['ngRoute', 'ngCookies', 'angular-carousel', 'ngTouch']);
 //============================= Controllers ===========================================================
 //Body控制器
-App_controllers.controller('body_controller', ['$scope', '$route', function ($scope, $route) {
+App_controllers.controller('body_controller', ['$scope', '$route', '$location', '$window' , function ($scope, $route,$location, $window) {
     var nav_bar_bottom_show_list = ['/', '/invest', '/personal_center', '/more'];
     $scope.$on('$routeChangeSuccess', function () {
-        //console.log($route);
-        //console.log($route.current);
-        //console.log($route.current.originalPath);
         $scope.should_appear = _.contains(nav_bar_bottom_show_list, $route.current.originalPath.trim());
     });
-    $scope.$on('header_l_clicked', function (evt) {
-        console.log('header_l_clicked: ', evt);
-    });
+    //$scope.$on('header_l_clicked', function (evt) {
+    //    console.log('header_l_clicked: ', evt);
+    //});
+    $scope.header_l_handler = function (href, evt_name) {
+        console.log('header_l_handler() ',href ,evt_name);
+        if (href === '') {
+            console.log('href is empty string');
+            if(evt_name) {
+                if(evt_name === 'history_back') {
+                    return $window.history.back();
+                }
+                return $scope.$broadcast("header_l_click ng-click", evt_name);
+            } else {
+                return false;
+            }
+        } else {
+            console.log('header_l_handler go to ', href);
+            $location.path(href);
+        }
+    };
+    $scope.header_r_handler = function (href, evt_name) {
+        console.log('header_r_handler() ',href ,evt_name);
+        if (href === '') {
+            console.log('href is empty string');
+            if(evt_name) {
+                return $scope.$broadcast("header_r_click ng-click", evt_name);
+            } else {
+                return false;
+            }
+        } else {
+            console.log('header_r_handler go to ',href);
+            $location.path(href);
+        }
+
+
+    };
 }]);
 //页面标题栏
 App_controllers.controller('header_controller', ['$scope', '$route', 'authHttpResponseInterceptor', function ($scope, $route, authHttpResponseInterceptor) {

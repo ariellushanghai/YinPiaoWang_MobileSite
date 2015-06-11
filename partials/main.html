@@ -1,6 +1,6 @@
 <!-- 图片轮播 -->
 
-<section class="homepage-carousel">
+<section class="homepage-carousel" ng-cloak>
     <ul rn-carousel rn-carousel-auto-slide rn-carousel-pause-on-hover rn-carousel-buffered rn-carousel-transition="hexagon" rn-carousel-index="carouselIndex" class="homepage-carousel-ul">
         <li ng-repeat="slide in slides">
             <div ng-style="{'background-image': 'url(' + slide.slide_src + ')'}"  class="homepage-carousel-slide-container">
