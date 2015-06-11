@@ -55,8 +55,8 @@ App_controllers.controller('header_controller', ['$scope', '$route', 'authHttpRe
         //console.log($route.current.originalPath.trim());
         var l_btn = $route.current.header_left_button || 'default';
         var r_btn = $route.current.header_right_button || 'default';
-        console.log('左按钮：', authHttpResponseInterceptor.header_left_buttons[l_btn]);
-        console.log('右按钮：', authHttpResponseInterceptor.header_right_buttons[r_btn]);
+        //console.log('左按钮：', authHttpResponseInterceptor.header_left_buttons[l_btn]);
+        //console.log('右按钮：', authHttpResponseInterceptor.header_right_buttons[r_btn]);
         $scope.l_btn = authHttpResponseInterceptor.header_left_buttons[l_btn];
         $scope.r_btn = authHttpResponseInterceptor.header_right_buttons[r_btn];
         $scope.getPageTitle = $route.current.page_title;
@@ -113,7 +113,7 @@ App_controllers.controller('main_controller', ['$scope', 'userInfo', 'FetchDataS
     };
 
     FetchDataService.fetchData('List', 'ADMIN_SERVER', $scope.page).then(function (res) {
-        console.log('首页 res: ', res);
+        //console.log('首页 res: ', res);
         $scope.itemList = res;
     });
 }]);
@@ -189,6 +189,24 @@ App_controllers.controller('personal_center_controller', ['$scope', 'userInfo', 
     FetchDataService.fetchData('GET_CUSTOMERACCOUNT', 'ADMIN_SERVER').then(function (res) {
         console.log('res: ', res);
         $scope.data = res;
+    });
+}]);
+
+App_controllers.controller('personal_center_my_investments_controller', ['$scope', 'userInfo', 'FetchDataService', '$routeParams', function ($scope, userInfo, FetchDataService, $routeParams) {
+    console.log($routeParams);
+    $scope.page = {
+        "num": 15,
+        "page": 1,
+        "status": '',
+        "userId": userInfo.getUserInfo().id
+        //或者取loginService的UserId
+    };
+    console.log('scope.page: ',$scope.page);
+    $scope.onOff = ['关闭', '开启'];
+    $scope.data = {};
+    FetchDataService.fetchData('GET_44', 'TEST_2_SERVER',$scope.page).then(function (res) {
+        console.log('res: ', res);
+        $scope.itemList = res;
     });
 }]);
 App_controllers.controller('personal_center_goPayIndex_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
