@@ -385,6 +385,12 @@ App_services.factory('authHttpResponseInterceptor', [function () {
             "ngClick": "filterOfMyInvestments",
             "ngHref": "",
             "show": true
+        },
+        "save_my_seat_rule": {
+            "text": "规则",
+            "ngClick": "",
+            "ngHref": "",
+            "show": true
         }
     };
     return {

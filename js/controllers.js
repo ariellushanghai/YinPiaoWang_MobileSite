@@ -176,14 +176,18 @@ App_controllers.controller('invest_item_detail_controller', ['$scope', '$route',
         $scope.item = res;
     });
 }]);
+//=============================================
 //个人中心
 App_controllers.controller('PC_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
     $scope.onOff = ['关闭', '开启'];
+    $scope.userInfoObj = userInfo.getUserInfo();
+    $scope.log($scope.userInfoObj);
     $scope.data = {};
     FetchDataService.fetchData('GET_CUSTOMERACCOUNT', 'ADMIN_SERVER').then(function (res) {
         console.log('res: ', res);
         $scope.data = res;
     });
+
 }]);
 //我的投资
 App_controllers.controller('PC_my_investments_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
@@ -231,6 +235,45 @@ App_controllers.controller('PC_my_investments_item_detail_controller', ['$scope'
         $scope.item = res;
     });
 }]);
+// 我的投资->预约助手
+App_controllers.controller('PC_saveMySeat_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
+    $scope.userInfoObj = userInfo.getUserInfo();
+    FetchDataService.fetchData('GET', 'TEST_2_SERVER',{'uid': $scope.userInfoObj.userId}).then(function (res) {
+        console.log('res: ', res);
+        $scope.item = res;
+    });
+}]);
+// 我的投资->我的银两列表
+App_controllers.controller('PC_myTeals_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
+    $scope.teal = userInfo.getUserInfo().teal;
+    $scope.page = {
+        "num": 15,
+        "page": 1,
+        "status": 1,
+        "userId": userInfo.getUserInfo().id
+        //或者取loginService的UserId
+    };
+    $scope.typeList = ["注册奖励", "系统补发", "微博转发", "注册邀请", "每日签到", "大转盘", "VIP入群奖励", "投资奖励", "活动奖励", "纠错奖励", "官方奖励", "积分兑换", "活动赠送"];
+    $scope.$watch(function () {
+        return $scope.page.status;
+    }, function (newValue, oldValue) {
+        if(newValue == oldValue) {
+            console.log('newValue: ',newValue, 'oldValue: ',oldValue);
+            //$scope.showfilter = false;
+        } else {
+            $scope.fetchData($scope.page);
+        }
+    });
+    $scope.fetchData = function(page) {
+        FetchDataService.fetchData('FIND_TAELLIST', 'TEST_2_SERVER', page).then(function (res) {
+            console.log('FIND_TAELLIST: ', res);
+            $scope.item = res;
+        });
+    };
+    $scope.fetchData($scope.page);
+}]);
+// 我的投资->预约规则
+App_controllers.controller('PC_saveMySeatRule_controller', [function () {}]);
 //充值
 App_controllers.controller('PC_goPayIndex_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
     $scope.data = {};
@@ -239,5 +282,6 @@ App_controllers.controller('PC_goPayIndex_controller', ['$scope', 'userInfo', 'F
         $scope.data = res;
     });
 }]);
+
 // 404
 App_controllers.controller('fourZeroFour_controller', [function () {}]);

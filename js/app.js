@@ -49,10 +49,28 @@ App.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
         page_title: '订单详细',
         header_left_button: 'default',
         header_right_button: 'default'
+    }).when('/personal_center/my_teals', {
+        templateUrl: 'partials/my_teals.html',
+        controller: 'PC_myTeals_controller',
+        page_title: '我的银两',
+        header_left_button: 'default',
+        header_right_button: 'default'
     }).when('/personal_center/goPayIndex', {
         templateUrl: 'partials/goPayIndex.html',
         controller: 'PC_goPayIndex_controller',
         page_title: '充 值',
+        header_left_button: 'default',
+        header_right_button: 'default'
+    }).when('/personal_center/save_my_seat', {
+        templateUrl: 'partials/userBeSpeak.html',
+        controller: 'PC_saveMySeat_controller',
+        page_title: '预约助手',
+        header_left_button: 'default',
+        header_right_button: 'save_my_seat_rule'
+    }).when('/personal_center/save_my_seat_rule', {
+        templateUrl: 'partials/save_my_seat_rule.html',
+        controller: 'PC_saveMySeatRule_controller',
+        page_title: '预约规则',
         header_left_button: 'default',
         header_right_button: 'default'
     }).when('/more', {
