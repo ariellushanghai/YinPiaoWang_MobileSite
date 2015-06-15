@@ -20,3 +20,20 @@
         </li>
     </ul>
 </section>
+<!-- 筛选 -->
+<section class="pop_btm" ng-show="showfilter">
+    <ul ng-click="log(page)">
+        <li><a href ng-click="page.status=''">全 部</a></li>
+        <li><a href ng-click="page.status=0">等待付款</a></li>
+        <li><a href ng-click="page.status=1">付款完成</a></li>
+        <li><a href ng-click="page.status=2">付款超时</a></li>
+        <li><a href ng-click="page.status=5">退款成功</a></li>
+        <li><a href ng-click="page.status=6">已取消</a></li>
+        <li><a href ng-click="page.status=7">已还款</a></li>
+        <li><a href ng-click="showfilter=false">取 消</a></li>
+    </ul>
+</section>
+<!-- 筛选mask -->
+<div class="mask-show-filter" ng-show="showfilter">
+
+</div>

@@ -300,3 +300,15 @@ md-toolbar.md-default-theme {
 .homepage-carousel-indicators div.rn-carousel-indicator span.active {
     color: white;
 }
+.mask-show-filter {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 40px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: black;
+    opacity: 0.6;
+    z-index: 900;
+}

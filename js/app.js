@@ -29,7 +29,6 @@ App.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
         templateUrl: 'partials/login.html',
         controller: 'login_controller',
         page_title: '登录',
-        //header_left_button: 'blank',
         header_left_button: 'default',
         header_right_button: 'default'
     }).when('/personal_center', {
@@ -41,7 +40,9 @@ App.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
     }).when('/personal_center/my_investments/:id', {
         templateUrl: 'partials/my_investments.html',
         controller: 'personal_center_my_investments_controller',
-        page_title: '我的投资'
+        page_title: '我的投资',
+        header_left_button: 'default',
+        header_right_button: 'filterOfMyInvestments'
     }).when('/personal_center/goPayIndex', {
         templateUrl: 'partials/goPayIndex.html',
         controller: 'personal_center_goPayIndex_controller',

@@ -2,7 +2,6 @@
  * Created by <陆欢 ariellushanghai@icloud.com>on 4/15/15.
  */
 var App_services = angular.module('App_services', ['ngRoute', 'ngCookies', 'angular-carousel', 'ngTouch']);
-
 //=======================   服务  =======================
 //全局变量定义
 App_services.factory('globals', [function () {
@@ -325,7 +324,7 @@ App_services.factory('FetchDataService', ['$http', '$cookies', '$location', '$q'
                     "token": token
                 }
             }).then(function success(res) {
-                if(angular.isArray(res.data) || res.data.length > 0) {
+                if (angular.isArray(res.data) || res.data.length > 0) {
                     console.log('fetchArray() sucess: ', res);
                     d.resolve(warehouse.set(key, res.data));
                 } else {
@@ -379,6 +378,12 @@ App_services.factory('authHttpResponseInterceptor', [function () {
             "text": "充值",
             "ngClick": "",
             "ngHref": "/personal_center/goPayIndex",
+            "show": true
+        },
+        "filterOfMyInvestments": {
+            "text": "筛选",
+            "ngClick": "filterOfMyInvestments",
+            "ngHref": "",
             "show": true
         }
     };

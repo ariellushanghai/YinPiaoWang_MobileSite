@@ -4,7 +4,7 @@
 var App_controllers = angular.module('App_controllers', ['ngRoute', 'ngCookies', 'angular-carousel', 'ngTouch']);
 //============================= Controllers ===========================================================
 //Body控制器
-App_controllers.controller('body_controller', ['$scope', '$route', '$location', '$window' , function ($scope, $route,$location, $window) {
+App_controllers.controller('body_controller', ['$scope', '$route', '$location', '$window', function ($scope, $route, $location, $window) {
     var nav_bar_bottom_show_list = ['/', '/invest', '/personal_center', '/more'];
     $scope.$on('$routeChangeSuccess', function () {
         $scope.should_appear = _.contains(nav_bar_bottom_show_list, $route.current.originalPath.trim());
@@ -13,14 +13,14 @@ App_controllers.controller('body_controller', ['$scope', '$route', '$location', 
     //    console.log('header_l_clicked: ', evt);
     //});
     $scope.header_l_handler = function (href, evt_name) {
-        console.log('header_l_handler() ',href ,evt_name);
+        console.log('header_l_handler() ', href, evt_name);
         if (href === '') {
-            console.log('href is empty string');
-            if(evt_name) {
-                if(evt_name === 'history_back') {
+            if (evt_name) {
+                if (evt_name === 'history_back') {
                     return $window.history.back();
                 }
-                return $scope.$broadcast("header_l_click ng-click", evt_name);
+                //return $scope.$broadcast("header_l_click", evt_name);
+                return $scope.$broadcast(evt_name);
             } else {
                 return false;
             }
@@ -30,20 +30,18 @@ App_controllers.controller('body_controller', ['$scope', '$route', '$location', 
         }
     };
     $scope.header_r_handler = function (href, evt_name) {
-        console.log('header_r_handler() ',href ,evt_name);
+        console.log('header_r_handler() ', href, evt_name);
         if (href === '') {
-            console.log('href is empty string');
-            if(evt_name) {
-                return $scope.$broadcast("header_r_click ng-click", evt_name);
+            if (evt_name) {
+                //return $scope.$broadcast("header_r_click", evt_name);
+                return $scope.$broadcast(evt_name);
             } else {
                 return false;
             }
         } else {
-            console.log('header_r_handler go to ',href);
+            console.log('header_r_handler go to ', href);
             $location.path(href);
         }
-
-
     };
 }]);
 //页面标题栏
@@ -79,7 +77,6 @@ App_controllers.controller('menu_controller', ['$scope', '$location', function (
 App_controllers.controller('main_controller', ['$scope', 'userInfo', 'FetchDataService', 'globals', function ($scope, userInfo, FetchDataService, globals) {
     $scope.onOff = ['关闭', '开启'];
     $scope.billTypeList = ['待购买', '银票纯', '银票红', '银商', '转让', '第三方平台'];
-
     var dir = globals.ADDRESS;
     var slide_arg = {
         path: "/home/banner",
@@ -105,15 +102,13 @@ App_controllers.controller('main_controller', ['$scope', 'userInfo', 'FetchDataS
         //console.log('FINDBILLLIST_MAIN res: ', res);
         $scope.latestItems = res;
     });
-
     $scope.page = {
         "type": 0,
         "page": 1,
         "num": 10
     };
-
     FetchDataService.fetchData('List', 'ADMIN_SERVER', $scope.page).then(function (res) {
-        //console.log('首页 res: ', res);
+        console.log('首页 res: ', res);
         $scope.itemList = res;
     });
 }]);
@@ -191,9 +186,13 @@ App_controllers.controller('personal_center_controller', ['$scope', 'userInfo', 
         $scope.data = res;
     });
 }]);
-
+//我的投资
 App_controllers.controller('personal_center_my_investments_controller', ['$scope', 'userInfo', 'FetchDataService', '$routeParams', function ($scope, userInfo, FetchDataService, $routeParams) {
-    console.log($routeParams);
+    $scope.showfilter = false;
+    $scope.$on('filterOfMyInvestments', function (evt) {
+        //console.log('evt.name: ',evt.name);
+        $scope.showfilter = true;
+    });
     $scope.page = {
         "num": 15,
         "page": 1,
@@ -201,14 +200,27 @@ App_controllers.controller('personal_center_my_investments_controller', ['$scope
         "userId": userInfo.getUserInfo().id
         //或者取loginService的UserId
     };
-    console.log('scope.page: ',$scope.page);
-    $scope.onOff = ['关闭', '开启'];
-    $scope.data = {};
-    FetchDataService.fetchData('GET_44', 'TEST_2_SERVER',$scope.page).then(function (res) {
-        console.log('res: ', res);
-        $scope.itemList = res;
+    $scope.$watch(function () {
+        return $scope.page.status;
+    }, function (newValue, oldValue) {
+        $scope.fetchData($scope.page);
+        console.log('$scope.page.status newValue: ', newValue);
+        console.log(oldValue);
     });
+    $scope.log = function (str) {
+        console.log(str);
+    };
+    $scope.fetchData = function (page) {
+        console.log('fetchData(', page.status, ')');
+        FetchDataService.fetchData('GET_44', 'TEST_2_SERVER', page).then(function (res) {
+            console.log('res: ', res);
+            $scope.itemList = res;
+            $scope.showfilter = false
+        })
+    };
+    $scope.fetchData($scope.page);
 }]);
+//充值
 App_controllers.controller('personal_center_goPayIndex_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
     $scope.data = {};
     FetchDataService.fetchData('GET_CUSTOMERACCOUNT', 'ADMIN_SERVER').then(function (res) {
@@ -216,4 +228,5 @@ App_controllers.controller('personal_center_goPayIndex_controller', ['$scope', '
         $scope.data = res;
     });
 }]);
+// 404
 App_controllers.controller('fourZeroFour_controller', [function () {}]);
