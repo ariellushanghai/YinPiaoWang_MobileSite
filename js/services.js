@@ -100,7 +100,7 @@ App_services.factory('globals', [function () {
     ADDRESS.Detail = encodeURIComponent("mobile/trade/invest/bill/detail");
     //第三方平台投资项目详细
     ADDRESS.DETAIL_THIRDPARTY = encodeURIComponent("trade/restful/invest/thirdparty/detail");
-    // 最新投资项目
+    // 最新投资项目(首页)
     ADDRESS.FINDBILLLIST_MAIN = encodeURIComponent("trade/restful/main/bill/list");
     // 2.1直投项目投资列表项目
     ADDRESS.FINDBILLLIST_INVEST = encodeURIComponent("trade/restful/invest/bill/list");

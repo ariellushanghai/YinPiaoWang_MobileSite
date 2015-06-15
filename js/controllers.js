@@ -7,7 +7,7 @@ var App_controllers = angular.module('App_controllers', ['ngRoute', 'ngCookies',
 App_controllers.controller('body_controller', ['$scope', '$route', '$location', '$window', function ($scope, $route, $location, $window) {
     var nav_bar_bottom_show_list = ['/', '/invest', '/personal_center', '/more'];
     $scope.$on('$routeChangeSuccess', function () {
-        $scope.should_appear = _.contains(nav_bar_bottom_show_list, $route.current.originalPath.trim());
+        $scope.should_appear = _.contains(nav_bar_bottom_show_list, $route.current.originalPath);
     });
     //$scope.$on('header_l_clicked', function (evt) {
     //    console.log('header_l_clicked: ', evt);
@@ -168,9 +168,8 @@ App_controllers.controller('invest_controller', ['$scope', 'FetchDataService', f
 }]);
 //项目详情
 App_controllers.controller('invest_item_detail_controller', ['$scope', '$route', '$routeParams', 'FetchDataService', function ($scope, $route, $routeParams, FetchDataService) {
-    var billId = $routeParams.id.replace(':', '');
     var id = {
-        "id": billId
+        "id": $routeParams.id
     };
     FetchDataService.fetchData('Detail', 'ADMIN_SERVER', id).then(function (res) {
         //console.log('res: ', res);
@@ -178,7 +177,7 @@ App_controllers.controller('invest_item_detail_controller', ['$scope', '$route',
     });
 }]);
 //个人中心
-App_controllers.controller('personal_center_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
+App_controllers.controller('PC_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
     $scope.onOff = ['关闭', '开启'];
     $scope.data = {};
     FetchDataService.fetchData('GET_CUSTOMERACCOUNT', 'ADMIN_SERVER').then(function (res) {
@@ -187,7 +186,7 @@ App_controllers.controller('personal_center_controller', ['$scope', 'userInfo', 
     });
 }]);
 //我的投资
-App_controllers.controller('personal_center_my_investments_controller', ['$scope', 'userInfo', 'FetchDataService', '$routeParams', function ($scope, userInfo, FetchDataService, $routeParams) {
+App_controllers.controller('PC_my_investments_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
     $scope.showfilter = false;
     $scope.$on('filterOfMyInvestments', function (evt) {
         //console.log('evt.name: ',evt.name);
@@ -203,13 +202,14 @@ App_controllers.controller('personal_center_my_investments_controller', ['$scope
     $scope.$watch(function () {
         return $scope.page.status;
     }, function (newValue, oldValue) {
-        $scope.fetchData($scope.page);
-        console.log('$scope.page.status newValue: ', newValue);
-        console.log(oldValue);
+        if(newValue == oldValue) {
+            console.log('newValue: ',newValue, 'oldValue: ',oldValue);
+            $scope.showfilter = false;
+        } else {
+            $scope.fetchData($scope.page);
+        }
     });
-    $scope.log = function (str) {
-        console.log(str);
-    };
+
     $scope.fetchData = function (page) {
         console.log('fetchData(', page.status, ')');
         FetchDataService.fetchData('GET_44', 'TEST_2_SERVER', page).then(function (res) {
@@ -220,8 +220,19 @@ App_controllers.controller('personal_center_my_investments_controller', ['$scope
     };
     $scope.fetchData($scope.page);
 }]);
+//我的投资->订单详细
+App_controllers.controller('PC_my_investments_item_detail_controller', ['$scope', '$route', '$routeParams', 'FetchDataService', function ($scope, $route, $routeParams, FetchDataService) {
+    console.log($routeParams.id);
+    var id = {
+        "orderId": $routeParams.id
+    };
+    FetchDataService.fetchData('GET_45', 'TEST_2_SERVER', id).then(function (res) {
+        console.log('res: ', res);
+        $scope.item = res;
+    });
+}]);
 //充值
-App_controllers.controller('personal_center_goPayIndex_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
+App_controllers.controller('PC_goPayIndex_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
     $scope.data = {};
     FetchDataService.fetchData('GET_CUSTOMERACCOUNT', 'ADMIN_SERVER').then(function (res) {
         console.log('res: ', res);

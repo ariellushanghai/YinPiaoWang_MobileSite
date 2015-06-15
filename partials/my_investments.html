@@ -13,8 +13,12 @@
                     <span class="right">预期收益&nbsp;&nbsp;<span class="col_333">{{'¥' + item.profit}}</span></span>
                 </p>
                 <p class="text_r">
-                    <a href="#" class="mdtz_a">转让</a>
-                    <a href="#" class="mdtz_a">详情</a>
+                    <a href="#" class="mdtz_a" ng-show="item.operateType == 0">付款</a>
+                    <a href="#" class="mdtz_a" ng-show="item.operateType == 0">取消</a>
+                    <a href="#" class="mdtz_a" ng-show="item.operateType == 1">退款</a>
+                    <a href="#" class="mdtz_a" ng-show="item.operateType == 3">转让</a>
+                    <a href="#" class="mdtz_a" ng-show="item.operateType == 4">删除</a>
+                    <a ng-href="/personal_center/my_investments/item/{{item.id}}" class="mdtz_a">详情</a>
                 </p>
             </a>
         </li>

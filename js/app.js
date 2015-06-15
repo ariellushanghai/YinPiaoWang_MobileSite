@@ -33,19 +33,25 @@ App.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
         header_right_button: 'default'
     }).when('/personal_center', {
         templateUrl: 'partials/personal_center.html',
-        controller: 'personal_center_controller',
+        controller: 'PC_controller',
         page_title: '个人中心',
         header_left_button: 'blank',
         header_right_button: 'goPayIndex'
-    }).when('/personal_center/my_investments/:id', {
+    }).when('/personal_center/my_investments/', {
         templateUrl: 'partials/my_investments.html',
-        controller: 'personal_center_my_investments_controller',
+        controller: 'PC_my_investments_controller',
         page_title: '我的投资',
         header_left_button: 'default',
         header_right_button: 'filterOfMyInvestments'
+    }).when('/personal_center/my_investments/item/:id', {
+        templateUrl: 'partials/my_investments_item_detail.html',
+        controller: 'PC_my_investments_item_detail_controller',
+        page_title: '订单详细',
+        header_left_button: 'default',
+        header_right_button: 'default'
     }).when('/personal_center/goPayIndex', {
         templateUrl: 'partials/goPayIndex.html',
-        controller: 'personal_center_goPayIndex_controller',
+        controller: 'PC_goPayIndex_controller',
         page_title: '充 值',
         header_left_button: 'default',
         header_right_button: 'default'
@@ -71,7 +77,9 @@ App.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 }]);
 App.run(['$rootScope', '$location', '$cookies', '$log', 'authHttpResponseInterceptor', function ($rootScope, $location, $cookies, $log,  authHttpResponseInterceptor) {
-    $rootScope.$log = $log;
+    $rootScope.log = function (str) {
+        console.log(str);
+    };
     $rootScope.$on('$routeChangeSuccess', function (evt, curr_route, prev_route) {
         //Interceptor.log(curr_route);
     });
