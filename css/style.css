@@ -10,6 +10,9 @@ ul, ol { list-style:none; }
 /*input,textarea{background: none; border: none;}*/
 /*table { border-collapse:collapse; }*/
 a {text-decoration:none; color: rgb(99, 99, 99);}
+a.ng-click-active {
+    opacity: 0.9;
+}
 input[type="button"] {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -51,9 +54,14 @@ body {
 .ng-view-container {
     position: absolute;
     width: 100%;
-    height: 100%;
+    min-height: 100%;
+    /*height: 100%;*/
     z-index: 0;
-    top: 40px;
+    /*top: 40px;*/
+    top: 0px;
+    margin-top: 40px;
+    margin-bottom: 56px;
+    /*padding-bottom: 56px;*/
     overflow-x: hidden;
 }
 .ng-view-container.ng-enter, .ng-view-container.ng-leave {
@@ -311,4 +319,71 @@ md-toolbar.md-default-theme {
     background-color: black;
     opacity: 0.6;
     z-index: 900;
+}
+.current * {
+    -moz-transition: all .1s cubic-bezier(0.4, 0.0, 1, 1);
+    -o-transition: all .1s cubic-bezier(0.4, 0.0, 1, 1);
+    -webkit-transition: all .1s cubic-bezier(0.4, 0.0, 1, 1);
+    transition: all .1s cubic-bezier(0.4, 0.0, 1, 1);
+}
+.mc_list li {
+    min-height: 50px;
+}
+.bgred, .mdyl_list_left, .yinl {
+    height: 98px;
+    min-height: 98px;
+
+}
+.mdyl_list_right {
+    height: 94px;
+    min-width: 94px;
+    width: 94px;
+}
+.yinl {
+    background-image: url("../asserts/icons/wdyl_logobg.png");
+    background-size: cover;
+    background-position-x: -20px;
+    background-position-y: 0px;
+    width: 70px;
+    line-height: 98px;
+    color: #ffffff;
+    font-size: 15px;
+    text-align: center;
+    position: absolute;
+    z-index: 4;
+    top: 0;
+    right: 102px;
+}
+.wid20 {
+    width: 20%;
+    float: left;
+}
+.wid80 {
+    width: 80%;
+    float: left;
+}
+.Percentage {
+    margin-left: -0.4em;
+}
+.pagenation-btn {
+    width: 100%;
+    height: 30px;
+    text-align: center;
+    background-color: #f2f2f2;
+    padding-bottom: 1.6em;
+}
+.pagenation-btn a {
+    width: 20%;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    display: inline-block;
+    margin: 0px 20px;
+    color: white;
+    background-color: #cc0000;
+}
+
+.invest-page {
+    background-color: #f2f2f2;
+
 }

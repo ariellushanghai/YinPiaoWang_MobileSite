@@ -76,7 +76,7 @@ App_controllers.controller('menu_controller', ['$scope', '$location', function (
 //首页
 App_controllers.controller('main_controller', ['$scope', 'userInfo', 'FetchDataService', 'globals', function ($scope, userInfo, FetchDataService, globals) {
     $scope.onOff = ['关闭', '开启'];
-    $scope.billTypeList = ['待购买', '银票纯', '银票红', '银商', '转让', '第三方平台'];
+    $scope.billTypeList = ['银票理财', '银商理财', '银票纯一号', '银票红一号', '银票红二号', '银票纯二号'];
     var dir = globals.ADDRESS;
     var slide_arg = {
         path: "/home/banner",
@@ -103,18 +103,25 @@ App_controllers.controller('main_controller', ['$scope', 'userInfo', 'FetchDataS
         $scope.latestItems = res;
     });
     $scope.page = {
-        "type": 0,
+        "type": '',
         "page": 1,
         "num": 10
     };
-    FetchDataService.fetchData('List', 'ADMIN_SERVER', $scope.page).then(function (res) {
-        console.log('首页 res: ', res);
-        $scope.itemList = res;
-    });
+    $scope.switchTab = function (pageType) {
+        $scope.page.type = pageType;
+        $scope.fetchData();
+    };
+    $scope.fetchData = function () {
+        FetchDataService.fetchData('List', 'ADMIN_SERVER', $scope.page).then(function (res) {
+            console.log('首页 res: ', res);
+            $scope.itemList = res;
+        });
+    }
+    $scope.fetchData();
 }]);
 //登陆
 App_controllers.controller('login_controller', ['$scope', 'loginService', function ($scope, loginService) {
-    $scope.username = '13812345678';
+    $scope.username = '13506991523';
     $scope.password = '111111';
     $scope.fetchCaptcha = function () {
         loginService.fetchCaptcha();
@@ -131,7 +138,7 @@ App_controllers.controller('login_controller', ['$scope', 'loginService', functi
 }]);
 //注册
 App_controllers.controller('register', ['$scope', 'loginService', function ($scope, loginService) {
-    $scope.username = '13812345678';
+    $scope.username = '13506991523';
     $scope.password = '111111';
     $scope.fetchCaptcha = function () {
         loginService.fetchCaptcha();
@@ -146,25 +153,44 @@ App_controllers.controller('register', ['$scope', 'loginService', function ($sco
         loginService.login(cred);
     }
 }]);
-//更多
-App_controllers.controller('more_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {}]);
 //投资列表
 App_controllers.controller('invest_controller', ['$scope', 'FetchDataService', function ($scope, FetchDataService) {
-    $scope.billTypeList = ['待购买', '银票纯', '银票红', '银商', '转让', '第三方平台'];
+    $scope.billTypeList = ['银票理财', '银商理财', '银票纯一号', '银票红一号', '银票红二号', '银票纯二号'];
     $scope.page = {
-        "type": 0,
+        "type": '',
         "page": 1,
-        "num": 10
+        "num": 15
     };
-    $scope.$watch(function (scope) {
-        return scope.page;
-    }, function () {
-        console.log('hey, page has changed!');
-    });
-    FetchDataService.fetchData('List', 'ADMIN_SERVER', $scope.page).then(function (res) {
-        //console.log('res: ', res);
-        $scope.itemList = res;
-    });
+    //$scope.$watch(function () {
+    //    return $scope.page;
+    //}, function (newValue, oldValue) {
+    //    if(newValue !== oldValue) {
+    //        console.log('newValue !== oldValue');
+    //        console.log('$scope.page',$scope.page);
+    //        $scope.fetchData($scope.page);
+    //    }
+    //});
+    $scope.switchTab = function (pageType) {
+        $scope.page.type = pageType;
+        $scope.fetchData();
+    };
+    $scope.flipFlop = function (direction) {
+        if (direction === '+') {
+            $scope.page.page = $scope.page.page + 1;
+        } else {
+            $scope.page.page = $scope.page.page - 1;
+        }
+        $scope.fetchData();
+    };
+    $scope.fetchData = function () {
+        FetchDataService.fetchData('List', 'ADMIN_SERVER', $scope.page).then(function (res) {
+            console.log('$scope.page', $scope.page);
+            console.log('invest_controller res: ', res);
+            $scope.itemList = res;
+            console.log('$scope.itemList.length: ', $scope.itemList.length);
+        });
+    };
+    $scope.fetchData();
 }]);
 //项目详情
 App_controllers.controller('invest_item_detail_controller', ['$scope', '$route', '$routeParams', 'FetchDataService', function ($scope, $route, $routeParams, FetchDataService) {
@@ -187,7 +213,10 @@ App_controllers.controller('PC_controller', ['$scope', 'userInfo', 'FetchDataSer
         console.log('res: ', res);
         $scope.data = res;
     });
-
+    FetchDataService.fetchData('GRT_MSGCOUNT', 'TEST_2_SERVER').then(function (res) {
+        console.log('msgCount: ', res);
+        $scope.data.msgCount = res;
+    });
 }]);
 //我的投资
 App_controllers.controller('PC_my_investments_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
@@ -201,19 +230,18 @@ App_controllers.controller('PC_my_investments_controller', ['$scope', 'userInfo'
         "page": 1,
         "status": '',
         "userId": userInfo.getUserInfo().id
-        //或者取loginService的UserId
+            //或者取loginService的UserId
     };
     $scope.$watch(function () {
         return $scope.page.status;
     }, function (newValue, oldValue) {
-        if(newValue == oldValue) {
-            console.log('newValue: ',newValue, 'oldValue: ',oldValue);
+        if (newValue == oldValue) {
+            console.log('newValue: ', newValue, 'oldValue: ', oldValue);
             $scope.showfilter = false;
         } else {
             $scope.fetchData($scope.page);
         }
     });
-
     $scope.fetchData = function (page) {
         console.log('fetchData(', page.status, ')');
         FetchDataService.fetchData('GET_44', 'TEST_2_SERVER', page).then(function (res) {
@@ -238,7 +266,9 @@ App_controllers.controller('PC_my_investments_item_detail_controller', ['$scope'
 // 我的投资->预约助手
 App_controllers.controller('PC_saveMySeat_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
     $scope.userInfoObj = userInfo.getUserInfo();
-    FetchDataService.fetchData('GET', 'TEST_2_SERVER',{'uid': $scope.userInfoObj.userId}).then(function (res) {
+    FetchDataService.fetchData('GET', 'TEST_2_SERVER', {
+        'uid': $scope.userInfoObj.userId
+    }).then(function (res) {
         console.log('res: ', res);
         $scope.item = res;
     });
@@ -251,23 +281,23 @@ App_controllers.controller('PC_myTeals_controller', ['$scope', 'userInfo', 'Fetc
         "page": 1,
         "status": 1,
         "userId": userInfo.getUserInfo().id
-        //或者取loginService的UserId
+            //或者取loginService的UserId
     };
     $scope.typeList = ["注册奖励", "系统补发", "微博转发", "注册邀请", "每日签到", "大转盘", "VIP入群奖励", "投资奖励", "活动奖励", "纠错奖励", "官方奖励", "积分兑换", "活动赠送"];
     $scope.$watch(function () {
         return $scope.page.status;
     }, function (newValue, oldValue) {
-        if(newValue == oldValue) {
-            console.log('newValue: ',newValue, 'oldValue: ',oldValue);
+        if (newValue == oldValue) {
+            console.log('newValue: ', newValue, 'oldValue: ', oldValue);
             //$scope.showfilter = false;
         } else {
             $scope.fetchData($scope.page);
         }
     });
-    $scope.fetchData = function(page) {
-        FetchDataService.fetchData('FIND_TAELLIST', 'TEST_2_SERVER', page).then(function (res) {
+    $scope.fetchData = function (page) {
+        FetchDataService.fetchData('FIND_TAELLIST', 'ADMIN_SERVER', page).then(function (res) {
             console.log('FIND_TAELLIST: ', res);
-            $scope.item = res;
+            $scope.itemList = res;
         });
     };
     $scope.fetchData($scope.page);
@@ -282,6 +312,15 @@ App_controllers.controller('PC_goPayIndex_controller', ['$scope', 'userInfo', 'F
         $scope.data = res;
     });
 }]);
-
+//=============================================
+//更多
+App_controllers.controller('more_controller', ['$scope', 'userInfo', 'FetchDataService', function ($scope, userInfo, FetchDataService) {
+    $scope.fetchData = function () {
+        FetchDataService.fetchData('FIND_TAELLIST', 'TEST_2_SERVER').then(function (res) {
+            console.log('GRT_MSGCOUNT: ', res);
+        });
+    };
+    $scope.fetchData();
+}]);
 // 404
 App_controllers.controller('fourZeroFour_controller', [function () {}]);

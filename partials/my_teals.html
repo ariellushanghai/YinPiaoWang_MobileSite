@@ -14,19 +14,19 @@
             <div class="bgred">
                 <div class="mdyl_list_left">
                     <h4>银票剩余面值 {{item.money}} 两</h4>
-                    <p>过期时间：{{item.validTime}}</p>
+                    <p>过期时间：{{item.validtime}}</p>
                 </div>
                 <div class="mdyl_list_right">
                     <p>{{item.createTime}}</p>
                     <p>至</p>
-                    <p>2015-06-10</p>
+                    <p>{{item.validtime}}</p>
                     <h4>{{typeList[item.type]}}</h4>
                 </div>
-                <div class="yinl"><span class="fz20">100</span> 两</div>
+                <div class="yinl"><span class="fz20">{{item.initMoney}}</span> 两</div>
             </div>
         </li>
     </ul>
-    <p class="text_c">当前剩余银两数 <span class="nubs">32</span> 两</p>
-    <a href="#" class="btn_a">立即使用</a>
+    <p class="text_c">当前剩余银两数 <span class="nubs">{{teal}}</span> 两</p>
+    <a href class="btn_a">立即使用</a>
 </section>
 <!-- 我的银两list END -->

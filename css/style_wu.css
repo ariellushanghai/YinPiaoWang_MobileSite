@@ -1610,7 +1610,7 @@ input.input_bor_none{
 }
 .mc_list_ul{
     border-top: 1px solid #cccccc;
-    margin-top: 10px;
+    /*margin-top: 10px;*/
     background-color: #ffffff;
 }
 .mc_list_ul .btn_list{

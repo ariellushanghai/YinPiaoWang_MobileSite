@@ -328,7 +328,7 @@ App_services.factory('FetchDataService', ['$http', '$cookies', '$location', '$q'
                     console.log('fetchArray() sucess: ', res);
                     d.resolve(warehouse.set(key, res.data));
                 } else {
-                    console.log(res.data, '不明原因 吊打余棋');
+                    console.log(res.data, 'fetchArray()不明原因 吊打余棋');
                     d.reject([]);
                 }
             }, function failed(res) {
@@ -342,7 +342,7 @@ App_services.factory('FetchDataService', ['$http', '$cookies', '$location', '$q'
 App_services.factory('authHttpResponseInterceptor', [function () {
     var header_left_buttons = {
         "default": {
-            "text": "返回",
+            "text": "<返回",
             //$window.history.back()
             "ngClick": "history_back",
             "ngHref": "",
@@ -490,6 +490,12 @@ App_services.factory('loginService', ['$http', '$cookies', '$location', 'globals
             }, function error(err) {
                 console.log('Login failed: ', err)
             });
+        },
+        signOut: function() {
+            userInfo.setUserInfo({});
+            console.log(userInfo.getUserInfo());
+            globals.set_uid_token(res.data.data.userId, res.data.data.token);
+            $location.path('/personal_center').replace();
         },
         setCookie: function (obj) {
             $cookies.redisName = obj;

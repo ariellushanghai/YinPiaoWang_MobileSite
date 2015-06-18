@@ -2,76 +2,97 @@
 <section class="myAccount" ng-cloak="data">
     <h4>截止昨日累计收益（元）</h4>
     <span class="menoy_mc">{{data.inthevoteProfit}}</span>
-    <i class="icon_mc"><img src="asserts/icons/mc_bg.png" /></i>
+    <i class="icon_mc"><img src="asserts/icons/mc_bg.png"/></i>
 </section>
+
 <section class="mc_list" ng-cloak="data">
-    <ul>
-        <li>
-            <b>预期总收益（元）</b>
-            <span class="money_mc1">{{data.totalProfit}}</span>
-        </li>
-        <li>
-            <b>已实现收益（元）</b>
-            <span class="money_mc1">{{data.allIncome}}</span>
-        </li>
-        <li>
-            <b>待回收本金（元）</b>
-            <span class="money_mc1">{{data.totalMoney}}</span>
-        </li>
-        <li>
-            <b>已回收本金（元）</b>
-            <span class="money_mc1">{{data.allBackMoney}}</span>
-        </li>
-        <li>
-            <b>预期总收益（元）</b>
-            <span class="money_mc1">{{data.totalProfit}}</span>
-        </li>
-        <li style="visibility: hidden">
-            <b>银钱罐今日利率（元）</b>
-            <span class="money_mc1"></span>
-        </li>
+<ul>
+    <li>
+        <b>预期总收益（元）</b>
+        <span class="money_mc1">{{data.totalProfit}}</span>
+    </li>
+    <li>
+        <b>已实现收益（元）</b>
+        <span class="money_mc1">{{data.allIncome}}</span>
+    </li>
+    <li>
+        <b>待回收本金（元）</b>
+        <span class="money_mc1">{{data.totalMoney}}</span>
+    </li>
+    <li>
+        <b>已回收本金（元）</b>
+        <span class="money_mc1">{{data.allBackMoney}}</span>
+    </li>
+    <li>
+        <b>预期总收益（元）</b>
+        <span class="money_mc1">{{data.totalProfit}}</span>
+    </li>
+    <li style="visibility: hidden">
+        <b>银钱罐今日利率（元）</b>
+        <span class="money_mc1"></span>
+    </li>
 
-        <li>
-            <a ng-href="#">
-                <b>账户余额（元）<i class="more_icon"></i></b>
-                <span class="money_mc1">{{data.availableMoney}}</span>
-            </a>
-        </li>
-    </ul>
-    <div class="cl"></div>
+    <li>
+        <a ng-href="#">
+            <b>账户余额（元）<i class="more_icon"></i></b>
+            <span class="money_mc1">{{data.availableMoney}}</span>
+        </a>
+    </li>
+</ul>
+    <div class="cl">
+    </div>
 </section>
-
+<section class="mc_list_ul touxiang">
+<ul>
+    <li>
+        <div class="tx_img">
+            <img src="../asserts/icons/touxiang.png" alt="头像"/>
+        </div>
+        <div class="tx_ac">
+            <h4>{{data.tel}}</h4>
+            <!-- con_vip0 到 con_vip3 -->
+            <span class="icon_tx icon_vip3"></span>
+            <!-- con_vip0 到 con_vip1 -->
+            <span class="sicon_tx icon_vip1"></span>
+        </div>
+    </li>
+</ul>
+</section>
 <section class="mc_list_ul" ng-cloak="data">
-    <ul>
-        <li><a ng-href="/personal_center/my_investments/" class="btn_list">
-            <i class="icon_tub icon_tub1"></i> 我的投资
-            <i class="icon_right"></i>
-        </a></li>
-        <!--<li><a ng-href="#" class="btn_list">-->
-            <!--<i class="icon_tub icon_tub2"></i> 银钱罐-->
-            <!--<i class="icon_right"></i>-->
-        <!--</a></li>-->
-        <li><a ng-href="/personal_center/save_my_seat" class="btn_list">
-            <i class="icon_tub icon_tub3"></i> 预约小助手
-            <i class="icon_right">{{onOff[userInfoObj.isOpen]}}</i>
-        </a></li>
-        <li><a ng-href="/personal_center/my_teals" class="btn_list">
-            <i class="icon_tub icon_tub4"></i> 我的银票
-            <i class="icon_right">{{data.teal}} 两</i>
-        </a></li>
-        <li><a ng-href="#" class="btn_list">
-            <i class="icon_tub icon_tub5"></i> 我的积分
-            <i class="icon_right">{{data.userFraction}} 分</i>
-        </a></li>
-        <li><a ng-href="#" class="btn_list">
-            <i class="icon_tub icon_tub6"></i> 我的转让
-            <i class="icon_right"></i>
-        </a></li>
-        <li><a ng-href="#" class="btn_list">
-            <i class="icon_tub icon_tub7"></i> 认证与安全
-            <i class="icon_right"></i>
-        </a></li>
-    </ul>
+<ul>
+    <li><a href="#" class="btn_list">
+        <i class="icon_tub icon_tub1"></i> 消息中心
+        <i class="icon_right"><span class="news_gd">{{data.msgCount}}</span></i>
+    </a></li>
+    <li><a ng-href="/personal_center/my_investments/" class="btn_list">
+        <i class="icon_tub icon_tub1"></i> 我的投资
+        <i class="icon_right"></i>
+    </a></li>
+    <!--<li><a ng-href="#" class="btn_list">-->
+    <!--<i class="icon_tub icon_tub2"></i> 银钱罐-->
+    <!--<i class="icon_right"></i>-->
+    <!--</a></li>-->
+    <li><a ng-href="/personal_center/save_my_seat" class="btn_list">
+        <i class="icon_tub icon_tub3"></i> 预约小助手
+        <i class="icon_right">{{onOff[userInfoObj.isOpen]}}</i>
+    </a></li>
+    <li><a ng-href="/personal_center/my_teals" class="btn_list">
+        <i class="icon_tub icon_tub4"></i> 我的银票
+        <i class="icon_right">{{data.teal}} 两</i>
+    </a></li>
+    <li><a ng-href="#" class="btn_list">
+        <i class="icon_tub icon_tub5"></i> 我的积分
+        <i class="icon_right">{{data.userFraction}} 分</i>
+    </a></li>
+    <li><a ng-href="#" class="btn_list">
+        <i class="icon_tub icon_tub6"></i> 我的转让
+        <i class="icon_right"></i>
+    </a></li>
+    <li><a ng-href="#" class="btn_list">
+        <i class="icon_tub icon_tub7"></i> 认证与安全
+        <i class="icon_right"></i>
+    </a></li>
+</ul>
 </section>
-
+<a href class="btn_a" ng-click="signOut()"> 退出当前账号 </a>
 <!-- 我的账户 END -->

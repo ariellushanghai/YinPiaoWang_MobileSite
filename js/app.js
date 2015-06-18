@@ -3,6 +3,8 @@
  */
 var App = angular.module('App', ['ngRoute', 'ngCookies', 'angular-carousel', 'ngTouch', 'App_directives','App_services','App_controllers']);
 App.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
+    $locationProvider.html5Mode(true);
+
     $routeProvider.when('/', {
         templateUrl: 'partials/main.html',
         controller: 'main_controller',
@@ -69,7 +71,7 @@ App.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
         header_right_button: 'save_my_seat_rule'
     }).when('/personal_center/save_my_seat_rule', {
         templateUrl: 'partials/save_my_seat_rule.html',
-        controller: 'PC_saveMySeatRule_controller',
+        //controller: 'PC_saveMySeatRule_controller',
         page_title: '预约规则',
         header_left_button: 'default',
         header_right_button: 'default'
@@ -88,7 +90,8 @@ App.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($r
     }).otherwise({
         redirectTo: '/fourZeroFour'
     });
-    $locationProvider.html5Mode(true).hashPrefix('!');
+
+    //$locationProvider.html5Mode(true).hashPrefix('!');
     $httpProvider.defaults.headers.common['Cache-Control'] = 'no-cache';
     //$httpProvider.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"};
     $httpProvider.defaults.withCredentials = true;
@@ -98,6 +101,11 @@ App.run(['$rootScope', '$location', '$cookies', '$log', 'authHttpResponseInterce
     $rootScope.log = function (str) {
         console.log(str);
     };
+    $rootScope.signOut = function () {
+        console.log('$rootScope.signOut()');
+
+    };
+
     $rootScope.$on('$routeChangeSuccess', function (evt, curr_route, prev_route) {
         //Interceptor.log(curr_route);
     });
